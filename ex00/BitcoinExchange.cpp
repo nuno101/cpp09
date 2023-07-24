@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:55:36 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/24 17:04:43 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/24 22:43:44 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,10 +112,15 @@ bool	BitcoinExchange::parse_input()
 	{
 		std::cout << "Line: " << trim(*line) << std::endl;
 		std::vector<std::string> v = split (*line, '|');
+		if (trim(*(v.begin())).compare("date") == 0)
+		{
+			line++;
+			continue;
+		}
 		for (std::vector<std::string>::iterator it = v.begin(); it != v.end(); it++)
 		{
-			word = *it;
-			std::cout << "  Word: " << trim(word) << std::endl;
+			word = trim(*it);
+			std::cout << "  Word: " << word << std::endl;
 			// parse date
 			if (it == v.begin())
 			{
