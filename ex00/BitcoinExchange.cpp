@@ -6,16 +6,18 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:55:36 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/24 22:43:44 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/24 23:01:33 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BitcoinExchange.hpp"
 
-BitcoinExchange::BitcoinExchange( std::string filename ) : _filename(filename)
+BitcoinExchange::BitcoinExchange( std::string btc_prices, std::string user_input ) : _data_filename(btc_prices), _input_filename(user_input)
 {
 	std::cout << "BitcoinExchange constructor" << std::endl;
-	std::cout << "_filename: " << _filename << std::endl;
+	std::cout << "_data_filename: " << _data_filename << std::endl;
+	std::cout << "_input_filename: " << _input_filename << std::endl;
+	read_input();
 }
 
 BitcoinExchange::~BitcoinExchange()
@@ -23,27 +25,27 @@ BitcoinExchange::~BitcoinExchange()
 }
 
 /*
- * read the user filename
+ * read a filename
  */
-void    BitcoinExchange::read_input(std::string filename)
+void    BitcoinExchange::read_input()
 {
 	std::string file;
 	std::string line;
 
-	file.assign(filename);
+	file.assign(_input_filename);
 	if (VERBOSE > 0)
 	   std::cout << "Reading: " << file << std::endl;
 
-	std::ifstream input_file(filename);
+	std::ifstream input_file(_input_filename);
 	if (!input_file.is_open())
 	{
-		std::cerr << "Could not open the file - '" << filename << "'" << std::endl;
+		std::cerr << "Could not open the file - '" << _input_filename << "'" << std::endl;
 		exit(EXIT_FAILURE);
 	}
 	while (std::getline(input_file, line))
 	{
-		//_lines.push_back(trim(line));
-		_lines.push_back(line);
+		//_input_lines.push_back(trim(line));
+		_input_lines.push_back(line);
 	   //std::cout << "Read: " << line << std::endl;
 	}
 	input_file.close();
@@ -107,8 +109,8 @@ bool	BitcoinExchange::parse_input()
 {
 	std::string	word;
 
-	std::vector<std::string>::iterator line = _lines.begin();
-	while(line != _lines.end())
+	std::vector<std::string>::iterator line = _input_lines.begin();
+	while(line != _input_lines.end())
 	{
 		std::cout << "Line: " << trim(*line) << std::endl;
 		std::vector<std::string> v = split (*line, '|');
