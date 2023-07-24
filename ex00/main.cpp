@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:45:50 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/24 23:06:28 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/24 23:17:45 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,5 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	BitcoinExchange bx("data.csv", argv[1]);
-	//bx.parse_input();
 	return (0);
 }

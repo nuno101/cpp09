@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:51:51 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/24 23:12:05 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/24 23:17:02 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ public:
 	~BitcoinExchange();
 
 	void	read_input(std::string filename, std::vector<std::string> &_lines);
+	bool	parse_data();
 	bool	parse_input();
 };
 

@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:55:36 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/24 23:12:59 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/24 23:26:40 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ BitcoinExchange::BitcoinExchange( std::string btc_prices, std::string user_input
 	std::cout << "_input_file: " << _input_file << std::endl;
 	read_input(_data_file, _data_lines);
 	read_input(_input_file, _input_lines);
+	parse_data();
+	//parse_input();
 }
 
 BitcoinExchange::~BitcoinExchange()
@@ -82,7 +84,7 @@ const std::vector<std::string> split (const std::string &s, const char delim)
     return result;
 }
 
-static	float parse_number(std::string word)
+static	float parse_number(std::string word, double max)
 {
 	double	val;
 
@@ -92,12 +94,46 @@ static	float parse_number(std::string word)
 		std::cout << "  Error: not a positive number." << std::endl;
 		val = -1.0;
 	}
-	else if (val > 1000.0)
+	else if (val > max)
 	{
 		std::cout << "  Error: too large a number." << std::endl;
 		val = -1.0;
 	}
 	return (val);
+}
+
+/*
+ *
+ */
+bool	BitcoinExchange::parse_data()
+{
+	std::string	word;
+
+	std::vector<std::string>::iterator line = _data_lines.begin();
+	while(line != _data_lines.end())
+	{
+		std::cout << "Line: " << trim(*line) << std::endl;
+		std::vector<std::string> v = split (*line, ',');
+		for (std::vector<std::string>::iterator it = v.begin(); it != v.end(); it++)
+		{
+			word = trim(*it);
+			std::cout << "  Word: " << word << std::endl;
+			if (it == v.begin())
+			{
+				std::vector<std::string> x = split (word, '-');
+				std::cout << "  Parsed value: TODO" << std::endl;
+			}
+			// parse value
+			else
+			{
+				//std::cout << "  Value: " << trim(word) << std::endl;
+				if (parse_number(trim(word), 1000000.0) >= 0)
+					std::cout << "  Parsed value: " << parse_number(trim(word), 1000000.0) << std::endl;
+			}
+		}
+		line++;
+	}
+	return (true);
 }
 
 /*
@@ -138,8 +174,8 @@ bool	BitcoinExchange::parse_input()
 			else
 			{
 				//std::cout << "  Value: " << trim(word) << std::endl;
-				if (parse_number(trim(word)) >= 0)
-					std::cout << "  Parsed value: " << parse_number(trim(word)) << std::endl;
+				if (parse_number(trim(word), 1000.0) >= 0)
+					std::cout << "  Parsed value: " << parse_number(trim(word), 1000.0) << std::endl;
 			}
 		}
 		line++;
