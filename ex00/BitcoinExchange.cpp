@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:55:36 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/23 18:49:47 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/24 17:04:43 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,29 @@ const std::vector<std::string> split (const std::string &s, const char delim)
     return result;
 }
 
+static	float parse_number(std::string word)
+{
+	double	val;
+
+	val = ::atof(word.c_str());
+	if (val < 0.0)
+	{
+		std::cout << "  Error: not a positive number." << std::endl;
+		val = -1.0;
+	}
+	else if (val > 1000.0)
+	{
+		std::cout << "  Error: too large a number." << std::endl;
+		val = -1.0;
+	}
+	return (val);
+}
+
+/*
+ * parse list of dates and values
+ * dates like: YYYY-MM-DD
+ * value: float or a positive integer between 0 and 1000.
+ */
 bool	BitcoinExchange::parse_input()
 {
 	std::string	word;
@@ -93,6 +116,24 @@ bool	BitcoinExchange::parse_input()
 		{
 			word = *it;
 			std::cout << "  Word: " << trim(word) << std::endl;
+			// parse date
+			if (it == v.begin())
+			{
+				std::vector<std::string> x = split (word, '-');
+				std::cout << "  Date: ";
+				for (std::vector<std::string>::iterator itd = x.begin(); itd != x.end(); itd++)
+				{
+					std::cout << trim(*itd) << "+";
+				}
+				std::cout << std::endl;
+			}
+			// parse value
+			else
+			{
+				//std::cout << "  Value: " << trim(word) << std::endl;
+				if (parse_number(trim(word)) >= 0)
+					std::cout << "  Parsed value: " << parse_number(trim(word)) << std::endl;
+			}
 		}
 		line++;
 	}
