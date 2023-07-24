@@ -6,18 +6,19 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:55:36 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/24 23:01:33 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/24 23:12:59 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BitcoinExchange.hpp"
 
-BitcoinExchange::BitcoinExchange( std::string btc_prices, std::string user_input ) : _data_filename(btc_prices), _input_filename(user_input)
+BitcoinExchange::BitcoinExchange( std::string btc_prices, std::string user_input ) : _data_file(btc_prices), _input_file(user_input)
 {
 	std::cout << "BitcoinExchange constructor" << std::endl;
-	std::cout << "_data_filename: " << _data_filename << std::endl;
-	std::cout << "_input_filename: " << _input_filename << std::endl;
-	read_input();
+	std::cout << "_data_file: " << _data_file << std::endl;
+	std::cout << "_input_file: " << _input_file << std::endl;
+	read_input(_data_file, _data_lines);
+	read_input(_input_file, _input_lines);
 }
 
 BitcoinExchange::~BitcoinExchange()
@@ -25,27 +26,26 @@ BitcoinExchange::~BitcoinExchange()
 }
 
 /*
- * read a filename
+ * read a filename into a vector of lines for parsing
  */
-void    BitcoinExchange::read_input()
+void    BitcoinExchange::read_input(std::string filename, std::vector<std::string> &_lines)
 {
 	std::string file;
 	std::string line;
 
-	file.assign(_input_filename);
+	file.assign(filename);
 	if (VERBOSE > 0)
 	   std::cout << "Reading: " << file << std::endl;
 
-	std::ifstream input_file(_input_filename);
+	std::ifstream input_file(filename);
 	if (!input_file.is_open())
 	{
-		std::cerr << "Could not open the file - '" << _input_filename << "'" << std::endl;
+		std::cerr << "Could not open the file - '" << filename << "'" << std::endl;
 		exit(EXIT_FAILURE);
 	}
 	while (std::getline(input_file, line))
 	{
-		//_input_lines.push_back(trim(line));
-		_input_lines.push_back(line);
+		_lines.push_back(line);
 	   //std::cout << "Read: " << line << std::endl;
 	}
 	input_file.close();
