@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:45:50 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/24 23:17:45 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/25 16:13:55 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	main(int argc, char **argv)
 		std::cout << "Error: call like ./btc <filename>" << std::endl;
 		return (1);
 	}
-	BitcoinExchange bx("data.csv", argv[1]);
+	BitcoinExchange bx("data.csv");
+	bx.process_input(argv[1]);
 	return (0);
 }

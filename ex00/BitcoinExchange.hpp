@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:51:51 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/25 12:18:15 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/25 16:17:57 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,30 +19,32 @@
 #include <fstream>
 #include <sstream>
 
+#define ERROR 1
+#define WARN 2
+#define INFO 3
+#define DEBUG 4
+
 typedef	struct s_log
 {
 	std::string	_date;
-	//unsigned int	_btc_date; // days since 2000
 	float		_value;
 }	t_log;
 
 class	BitcoinExchange
 {
 private:
-	std::string					_data_file;
 	std::vector<std::string>	_data_lines;
-	std::string					_input_file;
 	std::vector<std::string>	_input_lines;
-	std::map<int, t_log>		_price;
+	std::map<int, t_log>		_prices;
 	std::map<int, t_log>		_input;
 
 public:
-	BitcoinExchange( std::string btc_prices, std::string user_input );
+	BitcoinExchange( std::string btc_prices);
 	~BitcoinExchange();
 
 	void	read_input(std::string filename, std::vector<std::string> &_lines);
 	bool	parse_data();
-	bool	parse_input();
+	bool	process_input(std::string filename);
 	void	inspect();
 };
 

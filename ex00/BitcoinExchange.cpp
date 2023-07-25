@@ -6,21 +6,17 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:55:36 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/25 12:27:37 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/25 16:18:05 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BitcoinExchange.hpp"
 
-BitcoinExchange::BitcoinExchange( std::string btc_prices, std::string user_input ) : _data_file(btc_prices), _input_file(user_input)
+BitcoinExchange::BitcoinExchange( std::string btc_prices )
 {
 	std::cout << "BitcoinExchange constructor" << std::endl;
-	std::cout << "_data_file: " << _data_file << std::endl;
-	std::cout << "_input_file: " << _input_file << std::endl;
-	read_input(_data_file, _data_lines);
-	read_input(_input_file, _input_lines);
+	read_input(btc_prices, _data_lines);
 	parse_data();
-	//parse_input();
 	inspect();
 }
 
@@ -97,13 +93,15 @@ static	float parse_number(std::string word, double max)
 	val = ::atof(word.c_str());
 	if (val < 0.0)
 	{
-		std::cout << "  Error: not a positive number." << std::endl;
+		if (VERBOSE > WARN)
+			std::cout << "WARN: not a positive number." << std::endl;
 		val = -1.0;
 	}
 	else if (val > max)
 	{
-		std::cout << "  Error: too large a number." << std::endl;
-		val = -1.0;
+		if (VERBOSE > WARN)
+			std::cout << "WARN: too large a number." << std::endl;
+		val = -2.0;
 	}
 	return (val);
 }
@@ -134,14 +132,18 @@ static	int parse_date(std::string word)
 
 	if (input_error == true)
 	{
-		std::cout << "Error: bad input => " << word << std::endl;
+		if (VERBOSE > DEBUG)
+			std::cout << "DEBUG: bad input => " << word << std::endl;
 		return (-1);
 	}
 	//std::cout << "  Parsed date: " << year << "." << month << "." << day << std::endl;
 	return (year *10000 + month * 100 + day);
 }
 
-
+/*
+ * parse data.csv containing the Bitcoin day closing prices
+ * store the prices in _prices
+ */
 bool	BitcoinExchange::parse_data()
 {
 	std::string	word;
@@ -179,7 +181,7 @@ bool	BitcoinExchange::parse_data()
 				if (price >= 0.0)
 				{
 					std::cout << "  Parsed value: " << parse_number(trim(*it), 1000000.0) << std::endl;
-					ret = _price.insert( std::pair<int, t_log>(date_index, date_and_price) );
+					ret = _prices.insert( std::pair<int, t_log>(date_index, date_and_price) );
 					if (ret.second == false) {
 						std::cout << "element " << date_index << " already existed\n";
 						//std::cout << " with a value of " << ret.first->second << '\n';
@@ -199,8 +201,8 @@ bool	BitcoinExchange::parse_data()
  */
 void	BitcoinExchange::inspect()
 {
-	std::cout << "Inspect _price map:" << std::endl;
-	for (std::map<int, t_log>::iterator it = _price.begin(); it != _price.end(); it++)
+	std::cout << "Inspect _prices map:" << std::endl;
+	for (std::map<int, t_log>::iterator it = _prices.begin(); it != _prices.end(); it++)
 	{
 		std::cout << it->first << " => { label: "<< it->second._date;
 		std::cout << ", price: " << it->second._value << " }" << std::endl;
@@ -212,10 +214,14 @@ void	BitcoinExchange::inspect()
  * dates like: YYYY-MM-DD
  * value: float or a positive integer between 0 and 1000.
  */
-bool	BitcoinExchange::parse_input()
+bool	BitcoinExchange::process_input(std::string filename)
 {
 	std::string	word;
+	int			date_index;
+	std::string	message;
+	float		result;
 
+	read_input(filename, _input_lines);
 	std::vector<std::string>::iterator line = _input_lines.begin();
 	while(line != _input_lines.end())
 	{
@@ -229,26 +235,39 @@ bool	BitcoinExchange::parse_input()
 		for (std::vector<std::string>::iterator it = v.begin(); it != v.end(); it++)
 		{
 			word = trim(*it);
-			std::cout << "  Word: " << word << std::endl;
-			// parse date
-			if (it == v.begin())
+			if (it == v.begin()) // parse date
 			{
 				std::vector<std::string> x = split (word, '-');
-				std::cout << "  Date: ";
-				for (std::vector<std::string>::iterator itd = x.begin(); itd != x.end(); itd++)
+				date_index = parse_date(trim(*it));
+				if (date_index == -1)
 				{
-					std::cout << trim(*itd) << "+";
+					//std::cout << "Error: bad input => " << word << std::endl;
+					message = "Error: bad input => " + word;
 				}
-				std::cout << std::endl;
+				else
+				{
+					//message = word + " TODO: get_price_at(date_index) ";
+					message = word;
+					//_prices.at(date_index)
+				}
 			}
 			// parse value
 			else
 			{
 				//std::cout << "  Value: " << trim(word) << std::endl;
-				if (parse_number(trim(word), 1000.0) >= 0)
-					std::cout << "  Parsed value: " << parse_number(trim(word), 1000.0) << std::endl;
+				result = parse_number(trim(word), 1000.0);
+				if (result >= 0)
+					//std::cout << "  Parsed value: " << parse_number(trim(word), 1000.0) << std::endl;
+					message += " => " + trim(word) + " = TODO!!!";
+				else if (result == -1.0)
+					message = "Error: not a positive number.";
+				else if (result == -2.0)
+					message = "Error: too large of a number.";
+				else
+					message = "Error: unsupported result!";
 			}
 		}
+		std::cout << message << std::endl;
 		line++;
 	}
 	return (true);
