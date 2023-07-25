@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:08:54 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/25 22:52:12 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/25 23:10:12 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,27 +28,28 @@ static  std::string trim(const std::string& str)
     return (str.substr(first, last - first + 1));
 }
 
+/*
+ * RPN constructor - loads the user input in the queue 
+ */
 RPN::RPN(std::string input)
 {
 	std::string	temp;
 	std::size_t end;
-	std::size_t i = 0;
 	std::size_t len;
 
 	std::cout << input << std::endl;
 
 	end = 0;
-	while (end != std::string::npos && i < 10)
+	while (end != std::string::npos)
 	{
 		input = trim(input);
 		len = input.size();
 		end = input.find(" ");
 		//std::cout << "End: " << end << std::endl;
-		std::cout << "Arg: " << input.substr(0, end) << std::endl;
+		//std::cout << "Arg: " << input.substr(0, end) << std::endl;
 		_queue.push(input.substr(0, end));
 		input = input.substr(end + 1, len);
 		//std::cout << "Input: " << input << std::endl;
-		i++;
 	}
 }
 
@@ -65,6 +66,12 @@ void	RPN::inspect_queue()
 		_queue.pop();
 	}
 	std::cout << std::endl;
+}
+
+bool	RPN::validate_input()
+{
+	// TODO
+	return (true);
 }
 
 static int	calc(int temp, int temp2, std::string operation)
