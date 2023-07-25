@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:51:51 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/25 16:17:57 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/25 16:30:48 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ public:
 
 	void	read_input(std::string filename, std::vector<std::string> &_lines);
 	bool	parse_data();
+	float	get_price_at(int date_index);
 	bool	process_input(std::string filename);
 	void	inspect();
 };

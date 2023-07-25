@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:55:36 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/25 16:18:05 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/25 16:52:43 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ BitcoinExchange::BitcoinExchange( std::string btc_prices )
 	std::cout << "BitcoinExchange constructor" << std::endl;
 	read_input(btc_prices, _data_lines);
 	parse_data();
-	inspect();
+	if (VERBOSE >= DEBUG)
+		inspect();
 }
 
 BitcoinExchange::~BitcoinExchange()
@@ -25,7 +26,8 @@ BitcoinExchange::~BitcoinExchange()
 }
 
 /*
- * read a filename into a vector of lines for parsing
+ * read a filename into a vector of lines
+ * no parsing is performed
  */
 void    BitcoinExchange::read_input(std::string filename, std::vector<std::string> &_lines)
 {
@@ -33,7 +35,7 @@ void    BitcoinExchange::read_input(std::string filename, std::vector<std::strin
 	std::string line;
 
 	file.assign(filename);
-	if (VERBOSE > 0)
+	if (VERBOSE >= INFO)
 	   std::cout << "Reading: " << file << std::endl;
 
 	std::ifstream input_file(filename);
@@ -45,11 +47,13 @@ void    BitcoinExchange::read_input(std::string filename, std::vector<std::strin
 	while (std::getline(input_file, line))
 	{
 		_lines.push_back(line);
-	   //std::cout << "Read: " << line << std::endl;
 	}
 	input_file.close();
 }
 
+/*
+ * trim white space around str
+ */
 static	std::string trim(const std::string& str)
 {
 	if (str.empty())
@@ -65,7 +69,7 @@ static	std::string trim(const std::string& str)
 
 /*
  * split string into a string's vector
- * Note: https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
+ * See also: https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
  */
 const std::vector<std::string> split (const std::string &s, const char delim)
 {
@@ -93,21 +97,21 @@ static	float parse_number(std::string word, double max)
 	val = ::atof(word.c_str());
 	if (val < 0.0)
 	{
-		if (VERBOSE > WARN)
+		if (VERBOSE >= WARN)
 			std::cout << "WARN: not a positive number." << std::endl;
 		val = -1.0;
 	}
 	else if (val > max)
 	{
-		if (VERBOSE > WARN)
+		if (VERBOSE >= WARN)
 			std::cout << "WARN: too large a number." << std::endl;
 		val = -2.0;
 	}
-	return (val);
+	return ((float) val);
 }
 
 /*
- * validate date and return an indexable date-like int
+ * validate date and return an indexable date-like integer
  */
 static	int parse_date(std::string word)
 {
@@ -132,7 +136,7 @@ static	int parse_date(std::string word)
 
 	if (input_error == true)
 	{
-		if (VERBOSE > DEBUG)
+		if (VERBOSE >= DEBUG)
 			std::cout << "DEBUG: bad input => " << word << std::endl;
 		return (-1);
 	}
@@ -142,6 +146,7 @@ static	int parse_date(std::string word)
 
 /*
  * parse data.csv containing the Bitcoin day closing prices
+ * format is: "date, value"
  * store the prices in _prices
  */
 bool	BitcoinExchange::parse_data()
@@ -155,7 +160,8 @@ bool	BitcoinExchange::parse_data()
 	std::vector<std::string>::iterator line = _data_lines.begin();
 	while(line != _data_lines.end())
 	{
-		std::cout << "Line: " << trim(*line) << std::endl;
+		if (VERBOSE >= DEBUG)
+			std::cout << "Line: " << trim(*line) << std::endl;
 		std::vector<std::string> v = split (*line, ',');
 		if (trim(*(v.begin())).compare("date") == 0)
 		{
@@ -168,7 +174,8 @@ bool	BitcoinExchange::parse_data()
 			if (it == v.begin()) // parse date
 			{
 				date_index = parse_date(trim(*it));
-				std::cout << "  Parsed date: " << date_index << std::endl;
+				if (VERBOSE >= DEBUG)
+					std::cout << "  Parsed date: " << date_index << std::endl;
 				if (date_index != -1)
 					date_and_price._date = trim(*it);
 				else
@@ -180,7 +187,8 @@ bool	BitcoinExchange::parse_data()
 				date_and_price._value = price;
 				if (price >= 0.0)
 				{
-					std::cout << "  Parsed value: " << parse_number(trim(*it), 1000000.0) << std::endl;
+					if (VERBOSE >= DEBUG)
+						std::cout << "  Parsed value: " << parse_number(trim(*it), 1000000.0) << std::endl;
 					ret = _prices.insert( std::pair<int, t_log>(date_index, date_and_price) );
 					if (ret.second == false) {
 						std::cout << "element " << date_index << " already existed\n";
@@ -209,6 +217,30 @@ void	BitcoinExchange::inspect()
 	}
 }
 
+float	BitcoinExchange::get_price_at(int date_index)
+{
+	float	result;
+	int		index;
+
+	try
+	{
+		result = _prices.at(date_index)._value;
+	}
+	catch (const std::out_of_range& oor)
+	{
+		for (std::map<int, t_log>::iterator it = _prices.begin(); it != _prices.end(); it++)
+		{
+			index = it->first;
+			if (index > date_index)
+			{
+				result = _prices.at(index)._value;
+				break;
+			}
+		}
+	}
+	return (result);
+}
+
 /*
  * parse list of dates and values
  * dates like: YYYY-MM-DD
@@ -225,7 +257,8 @@ bool	BitcoinExchange::process_input(std::string filename)
 	std::vector<std::string>::iterator line = _input_lines.begin();
 	while(line != _input_lines.end())
 	{
-		std::cout << "Line: " << trim(*line) << std::endl;
+		if (VERBOSE >= DEBUG)
+			std::cout << "Line: " << trim(*line) << std::endl;
 		std::vector<std::string> v = split (*line, '|');
 		if (trim(*(v.begin())).compare("date") == 0)
 		{
@@ -240,25 +273,16 @@ bool	BitcoinExchange::process_input(std::string filename)
 				std::vector<std::string> x = split (word, '-');
 				date_index = parse_date(trim(*it));
 				if (date_index == -1)
-				{
-					//std::cout << "Error: bad input => " << word << std::endl;
 					message = "Error: bad input => " + word;
-				}
 				else
-				{
-					//message = word + " TODO: get_price_at(date_index) ";
 					message = word;
-					//_prices.at(date_index)
-				}
 			}
-			// parse value
-			else
+			else // parse value
 			{
 				//std::cout << "  Value: " << trim(word) << std::endl;
 				result = parse_number(trim(word), 1000.0);
 				if (result >= 0)
-					//std::cout << "  Parsed value: " << parse_number(trim(word), 1000.0) << std::endl;
-					message += " => " + trim(word) + " = TODO!!!";
+					message += " => " + trim(word) + " = " + std::to_string(result * get_price_at(date_index)); 
 				else if (result == -1.0)
 					message = "Error: not a positive number.";
 				else if (result == -2.0)
