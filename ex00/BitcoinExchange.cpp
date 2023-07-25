@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:55:36 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/24 23:26:40 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/25 12:27:37 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ BitcoinExchange::BitcoinExchange( std::string btc_prices, std::string user_input
 	read_input(_input_file, _input_lines);
 	parse_data();
 	//parse_input();
+	inspect();
 }
 
 BitcoinExchange::~BitcoinExchange()
@@ -84,6 +85,11 @@ const std::vector<std::string> split (const std::string &s, const char delim)
     return result;
 }
 
+/*
+ * parse a string and return a float
+ * max defines the maximum float to be returned
+ * return -1 in case of error
+ */
 static	float parse_number(std::string word, double max)
 {
 	double	val;
@@ -103,37 +109,102 @@ static	float parse_number(std::string word, double max)
 }
 
 /*
- *
+ * validate date and return an indexable date-like int
  */
+static	int parse_date(std::string word)
+{
+	int	year;
+	int month;
+	int day;
+	bool	input_error = false;
+
+	std::vector<std::string> v = split (word, '-');
+
+	year = std::stoi(trim(*(v.begin())));
+	if (year < 2009 || year > 2023)
+		input_error = true;
+
+	month = std::stoi(trim(v.at(1)));
+	if (month < 1 || month > 12)
+		input_error = true;
+
+	day = std::stoi(trim(v.at(2)));
+	if (day < 1 || day > 31)
+		input_error = true;
+
+	if (input_error == true)
+	{
+		std::cout << "Error: bad input => " << word << std::endl;
+		return (-1);
+	}
+	//std::cout << "  Parsed date: " << year << "." << month << "." << day << std::endl;
+	return (year *10000 + month * 100 + day);
+}
+
+
 bool	BitcoinExchange::parse_data()
 {
 	std::string	word;
+	int			date_index;
+	float		price;
+	t_log		date_and_price;
+	std::pair<std::map<int, t_log>::iterator,bool> ret;
 
 	std::vector<std::string>::iterator line = _data_lines.begin();
 	while(line != _data_lines.end())
 	{
 		std::cout << "Line: " << trim(*line) << std::endl;
 		std::vector<std::string> v = split (*line, ',');
+		if (trim(*(v.begin())).compare("date") == 0)
+		{
+			line++;
+			continue;
+		}
 		for (std::vector<std::string>::iterator it = v.begin(); it != v.end(); it++)
 		{
-			word = trim(*it);
-			std::cout << "  Word: " << word << std::endl;
-			if (it == v.begin())
+			//std::cout << "  Word: " << trim(*it) << std::endl;
+			if (it == v.begin()) // parse date
 			{
-				std::vector<std::string> x = split (word, '-');
-				std::cout << "  Parsed value: TODO" << std::endl;
+				date_index = parse_date(trim(*it));
+				std::cout << "  Parsed date: " << date_index << std::endl;
+				if (date_index != -1)
+					date_and_price._date = trim(*it);
+				else
+					continue;
 			}
-			// parse value
-			else
+			else // parse value
 			{
-				//std::cout << "  Value: " << trim(word) << std::endl;
-				if (parse_number(trim(word), 1000000.0) >= 0)
-					std::cout << "  Parsed value: " << parse_number(trim(word), 1000000.0) << std::endl;
+				price = parse_number(trim(*it), 1000000.0);
+				date_and_price._value = price;
+				if (price >= 0.0)
+				{
+					std::cout << "  Parsed value: " << parse_number(trim(*it), 1000000.0) << std::endl;
+					ret = _price.insert( std::pair<int, t_log>(date_index, date_and_price) );
+					if (ret.second == false) {
+						std::cout << "element " << date_index << " already existed\n";
+						//std::cout << " with a value of " << ret.first->second << '\n';
+					}
+				}
+				else
+					std::cout << "  Error in parse_data(): " << price << std::endl;
 			}
 		}
 		line++;
 	}
 	return (true);
+}
+
+/*
+ * inspect std::map<int, t_log>
+ */
+void	BitcoinExchange::inspect()
+{
+	std::cout << "Inspect _price map:" << std::endl;
+	for (std::map<int, t_log>::iterator it = _price.begin(); it != _price.end(); it++)
+	{
+		std::cout << it->first << " => { label: "<< it->second._date;
+		std::cout << ", price: " << it->second._value << " }" << std::endl;
+	}
 }
 
 /*
