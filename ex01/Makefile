@@ -1,4 +1,4 @@
-NAME := rpn
+NAME := RPN 
 VERBOSE := 2 
 
 CPP_FLAGS := -Wextra -Werror -Wall --std=c++98 -fsanitize=address
