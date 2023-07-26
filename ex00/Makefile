@@ -1,8 +1,8 @@
 NAME := btc
-VERBOSE := 2 
+VERBOSE := 5
 
-#CPP_FLAGS := -Wextra -Werror -Wall --std=c++98 -fsanitize=address
-CPP_FLAGS := -Wextra -Werror -Wall --std=c++98
+CPP_FLAGS := -Wextra -Werror -Wall --std=c++98 -fsanitize=address
+#CPP_FLAGS := -Wextra -Werror -Wall --std=c++98
 
 CPP_FILES := main.cpp BitcoinExchange.cpp
 HPP_FILES := BitcoinExchange.hpp

@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:55:36 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/25 16:52:43 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/26 22:54:16 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 BitcoinExchange::BitcoinExchange( std::string btc_prices )
 {
 	std::cout << "BitcoinExchange constructor" << std::endl;
-	read_input(btc_prices, _data_lines);
-	parse_data();
+	read_input(btc_prices);
+	//parse_data();
 	if (VERBOSE >= DEBUG)
 		inspect();
 }
@@ -26,10 +26,9 @@ BitcoinExchange::~BitcoinExchange()
 }
 
 /*
- * read a filename into a vector of lines
- * no parsing is performed
+ * read a file line by line and call parse_data on it 
  */
-void    BitcoinExchange::read_input(std::string filename, std::vector<std::string> &_lines)
+void    BitcoinExchange::read_input(std::string filename)
 {
 	std::string file;
 	std::string line;
@@ -46,7 +45,7 @@ void    BitcoinExchange::read_input(std::string filename, std::vector<std::strin
 	}
 	while (std::getline(input_file, line))
 	{
-		_lines.push_back(line);
+		parse_data(line);
 	}
 	input_file.close();
 }
@@ -145,11 +144,11 @@ static	int parse_date(std::string word)
 }
 
 /*
- * parse data.csv containing the Bitcoin day closing prices
+ * parse a data.csv line containing the Bitcoin day closing prices
  * format is: "date, value"
  * store the prices in _prices
  */
-bool	BitcoinExchange::parse_data()
+bool	BitcoinExchange::parse_data(std::string line)
 {
 	std::string	word;
 	int			date_index;
@@ -157,16 +156,12 @@ bool	BitcoinExchange::parse_data()
 	t_log		date_and_price;
 	std::pair<std::map<int, t_log>::iterator,bool> ret;
 
-	std::vector<std::string>::iterator line = _data_lines.begin();
-	while(line != _data_lines.end())
-	{
 		if (VERBOSE >= DEBUG)
-			std::cout << "Line: " << trim(*line) << std::endl;
-		std::vector<std::string> v = split (*line, ',');
+			std::cout << "Line: " << trim(line) << std::endl;
+		std::vector<std::string> v = split (line, ',');
 		if (trim(*(v.begin())).compare("date") == 0)
 		{
-			line++;
-			continue;
+			return (true);
 		}
 		for (std::vector<std::string>::iterator it = v.begin(); it != v.end(); it++)
 		{
@@ -199,8 +194,6 @@ bool	BitcoinExchange::parse_data()
 					std::cout << "  Error in parse_data(): " << price << std::endl;
 			}
 		}
-		line++;
-	}
 	return (true);
 }
 
@@ -253,7 +246,8 @@ bool	BitcoinExchange::process_input(std::string filename)
 	std::string	message;
 	float		result;
 
-	read_input(filename, _input_lines);
+	//read_input(filename, _input_lines);
+	read_input(filename);
 	std::vector<std::string>::iterator line = _input_lines.begin();
 	while(line != _input_lines.end())
 	{
