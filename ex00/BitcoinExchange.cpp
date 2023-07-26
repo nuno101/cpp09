@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:55:36 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/26 23:04:57 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/26 23:15:08 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ BitcoinExchange::BitcoinExchange( std::string btc_prices )
 {
 	std::cout << "BitcoinExchange constructor" << std::endl;
 	read_input(btc_prices);
-	//parse_data();
 	if (VERBOSE >= DEBUG)
 		inspect();
 }
@@ -45,7 +44,10 @@ void    BitcoinExchange::read_input(std::string filename)
 	}
 	while (std::getline(input_file, line))
 	{
-		parse_data(line);
+		if (filename.compare("data.csv") == 0)
+			parse_data(line);
+		else
+			process_input(line);
 	}
 	input_file.close();
 }
@@ -241,25 +243,19 @@ float	BitcoinExchange::get_price_at(int date_index)
  * dates like: YYYY-MM-DD
  * value: float or a positive integer between 0 and 1000.
  */
-bool	BitcoinExchange::process_input(std::string filename)
+bool	BitcoinExchange::process_input(std::string line)
 {
 	std::string	word;
 	int			date_index;
 	std::string	message;
 	float		result;
 
-	//read_input(filename, _input_lines);
-	read_input(filename);
-	std::vector<std::string>::iterator line = _input_lines.begin();
-	while(line != _input_lines.end())
-	{
 		if (VERBOSE >= DEBUG)
-			std::cout << "Line: " << trim(*line) << std::endl;
-		std::vector<std::string> v = split (*line, '|');
+			std::cout << "Line: " << trim(line) << std::endl;
+		std::vector<std::string> v = split (line, '|');
 		if (trim(*(v.begin())).compare("date") == 0)
 		{
-			line++;
-			continue;
+			return (true);
 		}
 		for (std::vector<std::string>::iterator it = v.begin(); it != v.end(); it++)
 		{
@@ -288,7 +284,5 @@ bool	BitcoinExchange::process_input(std::string filename)
 			}
 		}
 		std::cout << message << std::endl;
-		line++;
-	}
 	return (true);
 }

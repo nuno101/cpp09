@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:51:51 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/26 22:47:40 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/26 23:14:04 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,7 @@ typedef	struct s_log
 class	BitcoinExchange
 {
 private:
-	std::vector<std::string>	_input_lines;
 	std::map<int, t_log>		_prices;
-	std::map<int, t_log>		_input;
 
 public:
 	BitcoinExchange( std::string btc_prices);
