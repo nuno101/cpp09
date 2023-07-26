@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:04:07 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/26 11:51:40 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/26 11:53:40 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int	main(int argc, char **argv)
 	std::cout << "After: TODO!" << std::endl;
 
 	// Execution time
+	// See also: https://stackoverflow.com/questions/10192903/time-in-milliseconds-in-c
 	gettimeofday(&stop, NULL);
 	std::cout << ((stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec) << " us\n"; 
 	return (0);
