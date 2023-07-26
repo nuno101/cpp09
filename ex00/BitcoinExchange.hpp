@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:51:51 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/26 23:14:04 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/26 23:29:56 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ public:
 	~BitcoinExchange();
 
 	void	read_input(std::string filename);
-	bool	parse_data(std::string line);
+	void	parse_btc_data(std::string line);
 	float	get_price_at(int date_index);
 	bool	process_input(std::string filename);
 	void	inspect();

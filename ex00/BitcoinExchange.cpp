@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:55:36 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/26 23:15:08 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/26 23:33:20 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void    BitcoinExchange::read_input(std::string filename)
 	while (std::getline(input_file, line))
 	{
 		if (filename.compare("data.csv") == 0)
-			parse_data(line);
+			parse_btc_data(line);
 		else
 			process_input(line);
 	}
@@ -149,12 +149,11 @@ static	int parse_date(std::string word)
  * parse a data.csv line containing the Bitcoin day closing prices
  * format is: "date, value"
  * store the prices in _prices
- * TODO: remove split function and usage of vector
- * replace with string.find(",") and create substrings
  */
-bool	BitcoinExchange::parse_data(std::string line)
+void	BitcoinExchange::parse_btc_data(std::string line)
 {
-	std::string	word;
+	std::string	first, second;
+	int			pos;
 	int			date_index;
 	float		price;
 	t_log		date_and_price;
@@ -162,43 +161,39 @@ bool	BitcoinExchange::parse_data(std::string line)
 
 	if (VERBOSE >= DEBUG)
 		std::cout << "Line: " << trim(line) << std::endl;
-	std::vector<std::string> v = split (line, ',');
-	if (trim(*(v.begin())).compare("date") == 0)
+	pos = line.find(",");
+	first = trim(line.substr(0, pos));
+	if (first.compare("date") == 0)
+		return ;
+	second = trim(line.substr(pos + 1, line.size()));
+	if (VERBOSE >= DEBUG)
 	{
-		return (true);
+		std::cout << "Date: " << first << std::endl;
+		std::cout << "Price: " << second << std::endl;
 	}
-	for (std::vector<std::string>::iterator it = v.begin(); it != v.end(); it++)
+	// parse date
+	date_index = parse_date(first);
+	if (VERBOSE >= DEBUG)
+		std::cout << "  Parsed date: " << date_index << std::endl;
+	if (date_index != -1)
+		date_and_price._date = first;
+	else
+		return ;
+	// parse value
+	price = parse_number(second, 1000000.0);
+	date_and_price._value = price;
+	if (price >= 0.0)
 	{
-		//std::cout << "  Word: " << trim(*it) << std::endl;
-		if (it == v.begin()) // parse date
-		{
-			date_index = parse_date(trim(*it));
-			if (VERBOSE >= DEBUG)
-				std::cout << "  Parsed date: " << date_index << std::endl;
-			if (date_index != -1)
-				date_and_price._date = trim(*it);
-			else
-				continue;
-		}
-		else // parse value
-		{
-			price = parse_number(trim(*it), 1000000.0);
-			date_and_price._value = price;
-			if (price >= 0.0)
-			{
-				if (VERBOSE >= DEBUG)
-					std::cout << "  Parsed value: " << parse_number(trim(*it), 1000000.0) << std::endl;
-				ret = _prices.insert( std::pair<int, t_log>(date_index, date_and_price) );
-				if (ret.second == false) {
-					std::cout << "element " << date_index << " already existed\n";
-					//std::cout << " with a value of " << ret.first->second << '\n';
-				}
-			}
-			else
-				std::cout << "  Error in parse_data(): " << price << std::endl;
+		if (VERBOSE >= DEBUG)
+			std::cout << "  Parsed value: " << parse_number(second, 1000000.0) << std::endl;
+		ret = _prices.insert( std::pair<int, t_log>(date_index, date_and_price) );
+		if (ret.second == false) {
+			std::cout << "element " << date_index << " exists!\n";
+			//std::cout << " with a value of " << ret.first->second << '\n';
 		}
 	}
-	return (true);
+	else
+		std::cout << "  Error in parse_data(): " << price << std::endl;
 }
 
 /*
@@ -250,39 +245,39 @@ bool	BitcoinExchange::process_input(std::string line)
 	std::string	message;
 	float		result;
 
-		if (VERBOSE >= DEBUG)
-			std::cout << "Line: " << trim(line) << std::endl;
-		std::vector<std::string> v = split (line, '|');
-		if (trim(*(v.begin())).compare("date") == 0)
+	if (VERBOSE >= DEBUG)
+		std::cout << "Line: " << trim(line) << std::endl;
+	std::vector<std::string> v = split (line, '|');
+	if (trim(*(v.begin())).compare("date") == 0)
+	{
+		return (true);
+	}
+	for (std::vector<std::string>::iterator it = v.begin(); it != v.end(); it++)
+	{
+		word = trim(*it);
+		if (it == v.begin()) // parse date
 		{
-			return (true);
+			std::vector<std::string> x = split (word, '-');
+			date_index = parse_date(trim(*it));
+			if (date_index == -1)
+				message = "Error: bad input => " + word;
+			else
+				message = word;
 		}
-		for (std::vector<std::string>::iterator it = v.begin(); it != v.end(); it++)
+		else // parse value
 		{
-			word = trim(*it);
-			if (it == v.begin()) // parse date
-			{
-				std::vector<std::string> x = split (word, '-');
-				date_index = parse_date(trim(*it));
-				if (date_index == -1)
-					message = "Error: bad input => " + word;
-				else
-					message = word;
-			}
-			else // parse value
-			{
-				//std::cout << "  Value: " << trim(word) << std::endl;
-				result = parse_number(trim(word), 1000.0);
-				if (result >= 0)
-					message += " => " + trim(word) + " = " + std::to_string(result * get_price_at(date_index)); 
-				else if (result == -1.0)
-					message = "Error: not a positive number.";
-				else if (result == -2.0)
-					message = "Error: too large of a number.";
-				else
-					message = "Error: unsupported result!";
-			}
+			//std::cout << "  Value: " << trim(word) << std::endl;
+			result = parse_number(trim(word), 1000.0);
+			if (result >= 0)
+				message += " => " + trim(word) + " = " + std::to_string(result * get_price_at(date_index)); 
+			else if (result == -1.0)
+				message = "Error: not a positive number.";
+			else if (result == -2.0)
+				message = "Error: too large of a number.";
+			else
+				message = "Error: unsupported result!";
 		}
-		std::cout << message << std::endl;
+	}
+	std::cout << message << std::endl;
 	return (true);
 }
