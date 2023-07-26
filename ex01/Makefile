@@ -1,8 +1,8 @@
 NAME := RPN 
-VERBOSE := 2 
+VERBOSE := 0 
 
-CPP_FLAGS := -Wextra -Werror -Wall --std=c++98 -g -fsanitize=address
-#CPP_FLAGS := -Wextra -Werror -Wall --std=c++98
+#CPP_FLAGS := -Wextra -Werror -Wall --std=c++98 -g -fsanitize=address
+CPP_FLAGS := -Wextra -Werror -Wall --std=c++98
 
 CPP_FILES := main.cpp RPN.cpp
 HPP_FILES := RPN.hpp
