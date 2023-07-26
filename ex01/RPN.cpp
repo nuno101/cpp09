@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:08:54 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/26 10:14:04 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/26 10:40:36 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static  std::string trim(const std::string& str)
 }
 
 /*
- * RPN constructor - loads the user input in the queue 
+ * RPN constructor - load the user input into the queue container
  */
 RPN::RPN(std::string input)
 {
@@ -37,15 +37,14 @@ RPN::RPN(std::string input)
 	std::size_t end;
 	std::size_t len;
 
-	std::cout << input << std::endl;
-
+	if (VERBOSE >= INFO)
+		std::cout << input << std::endl;
 	end = 0;
 	while (end != std::string::npos)
 	{
 		input = trim(input);
 		len = input.size();
 		end = input.find(" ");
-		//std::cout << "End: " << end << std::endl;
 		//std::cout << "Arg: " << input.substr(0, end) << std::endl;
 		_queue.push(input.substr(0, end));
 		input = input.substr(end + 1, len);
@@ -57,6 +56,10 @@ RPN::~RPN()
 {
 }
 
+/*
+ * NOTE: inspecting the queue will empty the queue container.
+ * Use only for debugging purposes
+ */
 void	RPN::inspect_queue()
 {
 	std::cout << "Queue inspector:" << std::endl;
@@ -68,10 +71,13 @@ void	RPN::inspect_queue()
 	std::cout << std::endl;
 }
 
+/*
+ * perform one operation
+ */
 static int	calc(int temp, int temp2, std::string operation)
 {
-	//std::cout << "temp: " << temp << " temp2: " << temp2 << " op: " << operation << std::endl;
-	std::cout << "calc: " << temp << " " << operation << " " << temp2 << std::endl;
+	if (VERBOSE >= INFO)
+		std::cout << "calc: " << temp << " " << operation << " " << temp2 << std::endl;
 
 	if (operation.compare("+") == 0)
 		return (temp + temp2);
@@ -88,6 +94,9 @@ static int	calc(int temp, int temp2, std::string operation)
 	}
 }
 
+/*
+ * dequeue the arguments to perform the calculation
+ */
 int	RPN::calculate()
 {
 	int	temp;
@@ -102,7 +111,8 @@ int	RPN::calculate()
 		_queue.pop();
 		temp = calc(temp, temp2, _queue.front());
 		_queue.pop();
-		std::cout << "result: " << temp << std::endl;
+		if (VERBOSE >= INFO)
+			std::cout << "result: " << temp << std::endl;
 	}
 	return (temp);
 }
