@@ -6,10 +6,11 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:04:07 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/26 11:35:59 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/26 11:51:40 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <sys/time.h>
 #include <iostream>
 #include "PmergeMe.hpp"
 
@@ -37,8 +38,11 @@ bool	validate_input(char *s)
 	return (true);
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
+	struct	timeval stop, start;
+	gettimeofday(&start, NULL);
+
 	int	i = 1;
 
 	if (argc < 2)
@@ -54,5 +58,9 @@ int main(int argc, char **argv)
 	//TODO
 	std::cout << "Before: TODO!" << std::endl;
 	std::cout << "After: TODO!" << std::endl;
+
+	// Execution time
+	gettimeofday(&stop, NULL);
+	std::cout << ((stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec) << " us\n"; 
 	return (0);
 }
