@@ -1,5 +1,5 @@
 NAME := RPN 
-VERBOSE := 0 
+VERBOSE := 2 
 
 CPP_FLAGS := -Wextra -Werror -Wall --std=c++98 -g -fsanitize=address
 #CPP_FLAGS := -Wextra -Werror -Wall --std=c++98

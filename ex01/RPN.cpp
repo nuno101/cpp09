@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:08:54 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/26 10:40:36 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/26 10:57:09 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,10 @@ static int	calc(int temp, int temp2, std::string operation)
 		return (temp / temp2);
 	else
 	{
-		std::cout << "FATAL: Operator: " << operation << " not supported\n";
+		if (VERBOSE >= ERROR)
+			std::cout << "FATAL: Operator: " << operation << " not supported\n";
+		else
+			std::cout << "Error" << std::endl;
 		exit(1);
 	}
 }
@@ -103,16 +106,35 @@ int	RPN::calculate()
 	int	temp2;
 	std::string	op;
 
-	temp = std::stoi(_queue.front());
-	_queue.pop();
-	while (!_queue.empty())
+	try
 	{
-		temp2 = std::stoi(_queue.front());
+		temp = std::stoi(_queue.front());
 		_queue.pop();
-		temp = calc(temp, temp2, _queue.front());
-		_queue.pop();
-		if (VERBOSE >= INFO)
-			std::cout << "result: " << temp << std::endl;
+		while (!_queue.empty())
+		{
+			temp2 = std::stoi(_queue.front());
+			_queue.pop();
+			temp = calc(temp, temp2, _queue.front());
+			_queue.pop();
+			if (VERBOSE >= INFO)
+				std::cout << "result: " << temp << std::endl;
+		}
+		return (temp);
 	}
-	return (temp);
+	catch (const std::invalid_argument& ia)
+	{
+		if (VERBOSE >= ERROR)
+			std::cout << "FATAL: invalid argument: " << ia.what() << std::endl;
+		else
+			std::cout << "Error" << std::endl;
+		exit(1);
+	}
+	catch (const std::length_error le)
+	{
+		if (VERBOSE >= ERROR)
+			std::cout << "FATAL: last operator missing" << std::endl;
+		else
+			std::cout << "Error" << std::endl;
+		exit(1);
+	}
 }
