@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:04:07 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/26 11:27:16 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/26 11:35:59 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,20 @@ bool	validate_input(char *s)
 
 int main(int argc, char **argv)
 {
-	if (argc != 2)
+	int	i = 1;
+
+	if (argc < 2)
 	{
-		std::cout << "Error: call like ./PmergeMe \"<positive integer sequence>\"" << std::endl;
+		std::cout << "Error: call like ./PmergeMe <positive integer(s) sequence>" << std::endl;
 		return (1);
 	}
-	if (validate_input(argv[1]))
+	while (i < argc)
 	{
-		std::cout << "Before: " << argv[1] << std::endl;
+		validate_input(argv[i]);
+		i++;
 	}
+	//TODO
+	std::cout << "Before: TODO!" << std::endl;
+	std::cout << "After: TODO!" << std::endl;
 	return (0);
 }
