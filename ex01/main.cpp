@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:04:31 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/26 10:34:14 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/26 11:08:23 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,6 @@ bool    validate_input(char *s)
 
 int main(int argc, char **argv)
 {
-    (void)argc;
-    (void)argv;
-
     if (argc != 2)
     {
         std::cout << "Error: call like ./RPN \"<inverted Polish mathematical expression>\"" << std::endl;
