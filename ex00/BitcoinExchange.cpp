@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:55:36 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/26 22:54:16 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/26 23:04:57 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,8 @@ static	int parse_date(std::string word)
  * parse a data.csv line containing the Bitcoin day closing prices
  * format is: "date, value"
  * store the prices in _prices
+ * TODO: remove split function and usage of vector
+ * replace with string.find(",") and create substrings
  */
 bool	BitcoinExchange::parse_data(std::string line)
 {
@@ -156,44 +158,44 @@ bool	BitcoinExchange::parse_data(std::string line)
 	t_log		date_and_price;
 	std::pair<std::map<int, t_log>::iterator,bool> ret;
 
-		if (VERBOSE >= DEBUG)
-			std::cout << "Line: " << trim(line) << std::endl;
-		std::vector<std::string> v = split (line, ',');
-		if (trim(*(v.begin())).compare("date") == 0)
+	if (VERBOSE >= DEBUG)
+		std::cout << "Line: " << trim(line) << std::endl;
+	std::vector<std::string> v = split (line, ',');
+	if (trim(*(v.begin())).compare("date") == 0)
+	{
+		return (true);
+	}
+	for (std::vector<std::string>::iterator it = v.begin(); it != v.end(); it++)
+	{
+		//std::cout << "  Word: " << trim(*it) << std::endl;
+		if (it == v.begin()) // parse date
 		{
-			return (true);
+			date_index = parse_date(trim(*it));
+			if (VERBOSE >= DEBUG)
+				std::cout << "  Parsed date: " << date_index << std::endl;
+			if (date_index != -1)
+				date_and_price._date = trim(*it);
+			else
+				continue;
 		}
-		for (std::vector<std::string>::iterator it = v.begin(); it != v.end(); it++)
+		else // parse value
 		{
-			//std::cout << "  Word: " << trim(*it) << std::endl;
-			if (it == v.begin()) // parse date
+			price = parse_number(trim(*it), 1000000.0);
+			date_and_price._value = price;
+			if (price >= 0.0)
 			{
-				date_index = parse_date(trim(*it));
 				if (VERBOSE >= DEBUG)
-					std::cout << "  Parsed date: " << date_index << std::endl;
-				if (date_index != -1)
-					date_and_price._date = trim(*it);
-				else
-					continue;
-			}
-			else // parse value
-			{
-				price = parse_number(trim(*it), 1000000.0);
-				date_and_price._value = price;
-				if (price >= 0.0)
-				{
-					if (VERBOSE >= DEBUG)
-						std::cout << "  Parsed value: " << parse_number(trim(*it), 1000000.0) << std::endl;
-					ret = _prices.insert( std::pair<int, t_log>(date_index, date_and_price) );
-					if (ret.second == false) {
-						std::cout << "element " << date_index << " already existed\n";
-						//std::cout << " with a value of " << ret.first->second << '\n';
-					}
+					std::cout << "  Parsed value: " << parse_number(trim(*it), 1000000.0) << std::endl;
+				ret = _prices.insert( std::pair<int, t_log>(date_index, date_and_price) );
+				if (ret.second == false) {
+					std::cout << "element " << date_index << " already existed\n";
+					//std::cout << " with a value of " << ret.first->second << '\n';
 				}
-				else
-					std::cout << "  Error in parse_data(): " << price << std::endl;
 			}
+			else
+				std::cout << "  Error in parse_data(): " << price << std::endl;
 		}
+	}
 	return (true);
 }
 
