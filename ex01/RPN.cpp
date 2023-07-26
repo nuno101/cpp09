@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:08:54 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/25 23:10:12 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/26 10:14:04 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,6 @@ void	RPN::inspect_queue()
 		_queue.pop();
 	}
 	std::cout << std::endl;
-}
-
-bool	RPN::validate_input()
-{
-	// TODO
-	return (true);
 }
 
 static int	calc(int temp, int temp2, std::string operation)

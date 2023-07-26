@@ -6,12 +6,17 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:04:31 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/25 23:12:11 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/26 10:15:02 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include "RPN.hpp"
+
+bool    validate_input()
+{
+    return (true);
+}
 
 int main(int argc, char **argv)
 {
@@ -23,10 +28,12 @@ int main(int argc, char **argv)
         std::cout << "Error: call like ./RPN \"<inverted Polish mathematical expression>\"" << std::endl;
         return (1);
     }
-	RPN rpn(argv[1]);
-	//calc.inspect_queue();
-	if (rpn.validate_input())
+	if (validate_input())
+	{
+		RPN rpn(argv[1]);
+		//calc.inspect_queue();
 		std::cout << rpn.calculate() << std::endl;
+	}
 	else
 		std::cout << "Error" << std::endl;
     return (0);
