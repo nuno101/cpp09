@@ -1,5 +1,5 @@
 NAME := btc
-VERBOSE := 5
+VERBOSE := 0
 
 CPP_FLAGS := -Wextra -Werror -Wall --std=c++98 -fsanitize=address
 #CPP_FLAGS := -Wextra -Werror -Wall --std=c++98

@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:51:51 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/26 23:29:56 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/26 23:43:41 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define BITCOIN_EXCHNAGE_HPP
 
 #include <iostream>
-#include <vector>
 #include <map>
 #include <fstream>
 #include <sstream>
@@ -42,7 +41,7 @@ public:
 	void	read_input(std::string filename);
 	void	parse_btc_data(std::string line);
 	float	get_price_at(int date_index);
-	bool	process_input(std::string filename);
+	void	process_input(std::string filename);
 	void	inspect();
 };
 

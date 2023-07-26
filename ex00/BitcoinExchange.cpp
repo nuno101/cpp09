@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:55:36 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/26 23:33:20 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/26 23:50:29 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,24 +69,6 @@ static	std::string trim(const std::string& str)
 }
 
 /*
- * split string into a string's vector
- * See also: https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
- */
-const std::vector<std::string> split (const std::string &s, const char delim)
-{
-    std::vector<std::string> result(0);
-    std::stringstream ss (s);
-    std::string item;
-
-    while (std::getline (ss, item, delim))
-    {
-        if (item != "")
-            result.push_back(item);
-    }
-    return result;
-}
-
-/*
  * parse a string and return a float
  * max defines the maximum float to be returned
  * return -1 in case of error
@@ -116,22 +98,32 @@ static	float parse_number(std::string word, double max)
  */
 static	int parse_date(std::string word)
 {
-	int	year;
-	int month;
-	int day;
-	bool	input_error = false;
+	std::string	first, second, third;
+	int			pos;
+	int			year, month, day;
+	bool		input_error = false;
 
-	std::vector<std::string> v = split (word, '-');
-
-	year = std::stoi(trim(*(v.begin())));
+	pos = word.find("-");
+	first = word.substr(0, pos);
+	word = word.substr(pos + 1, word.size());
+	pos = word.find("-");
+	second = word.substr(0, pos);
+	third = word.substr(pos + 1, word.size());
+	if (VERBOSE >= DEBUG)
+	{
+		std::cout << "YYYY: " << first << std::endl;
+		std::cout << "MM: " << second << std::endl;
+		std::cout << "DD: " << second << std::endl;
+	}
+	year = std::stoi(first);
 	if (year < 2009 || year > 2023)
 		input_error = true;
 
-	month = std::stoi(trim(v.at(1)));
+	month = std::stoi(second);
 	if (month < 1 || month > 12)
 		input_error = true;
 
-	day = std::stoi(trim(v.at(2)));
+	day = std::stoi(third);
 	if (day < 1 || day > 31)
 		input_error = true;
 
@@ -238,46 +230,43 @@ float	BitcoinExchange::get_price_at(int date_index)
  * dates like: YYYY-MM-DD
  * value: float or a positive integer between 0 and 1000.
  */
-bool	BitcoinExchange::process_input(std::string line)
+void	BitcoinExchange::process_input(std::string line)
 {
-	std::string	word;
+	std::string	first, second;
+	int			pos;
 	int			date_index;
 	std::string	message;
 	float		result;
 
 	if (VERBOSE >= DEBUG)
 		std::cout << "Line: " << trim(line) << std::endl;
-	std::vector<std::string> v = split (line, '|');
-	if (trim(*(v.begin())).compare("date") == 0)
+
+	pos = line.find("|");
+	first = trim(line.substr(0, pos));
+	if (first.compare("date") == 0)
+		return ;
+	second = trim(line.substr(pos + 1, line.size()));
+	if (VERBOSE >= DEBUG)
 	{
-		return (true);
+		std::cout << "Date: " << first << std::endl;
+		std::cout << "Value: " << second << std::endl;
 	}
-	for (std::vector<std::string>::iterator it = v.begin(); it != v.end(); it++)
-	{
-		word = trim(*it);
-		if (it == v.begin()) // parse date
-		{
-			std::vector<std::string> x = split (word, '-');
-			date_index = parse_date(trim(*it));
-			if (date_index == -1)
-				message = "Error: bad input => " + word;
-			else
-				message = word;
-		}
-		else // parse value
-		{
-			//std::cout << "  Value: " << trim(word) << std::endl;
-			result = parse_number(trim(word), 1000.0);
-			if (result >= 0)
-				message += " => " + trim(word) + " = " + std::to_string(result * get_price_at(date_index)); 
-			else if (result == -1.0)
-				message = "Error: not a positive number.";
-			else if (result == -2.0)
-				message = "Error: too large of a number.";
-			else
-				message = "Error: unsupported result!";
-		}
-	}
+	// parse date
+	date_index = parse_date(first);
+	if (date_index == -1)
+		message = "Error: bad input => " + first;
+	else
+		message = first;
+	// parse value
+	result = parse_number(second, 1000.0);
+	if (result >= 0)
+		message += " => " + second + " = " + std::to_string(result * get_price_at(date_index)); 
+	else if (result == -1.0)
+		message = "Error: not a positive number.";
+	else if (result == -2.0)
+		message = "Error: too large of a number.";
+	else
+		message = "Error: unsupported result!";
+
 	std::cout << message << std::endl;
-	return (true);
 }
