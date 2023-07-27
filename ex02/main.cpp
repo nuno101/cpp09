@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:04:07 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/26 11:53:40 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/27 16:50:26 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,19 @@ int	main(int argc, char **argv)
 		validate_input(argv[i]);
 		i++;
 	}
-	//TODO
-	std::cout << "Before: TODO!" << std::endl;
-	std::cout << "After: TODO!" << std::endl;
+	std::cout << "Before: ";
+	i = 1;
+	while (i < argc)
+	{
+		std::cout <<  argv[i] << " ";
+		i++;
+	}
+	std::cout << std::endl;
 
+	PmergeMe pm;
+	pm.load_vector(argc, argv);
+
+	std::cout << "After: TODO!" << std::endl;
 	// Execution time
 	// See also: https://stackoverflow.com/questions/10192903/time-in-milliseconds-in-c
 	gettimeofday(&stop, NULL);

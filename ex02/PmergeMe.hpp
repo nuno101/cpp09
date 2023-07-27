@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:09:55 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/26 11:12:05 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/27 16:50:33 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,29 @@
 # define PMERGE_ME_HPP
 
 #include <iostream>
+#include <vector>
 
 #define ERROR 1
 #define WARN 2
 #define INFO 3
 #define DEBUG 4
 
+typedef	struct s_pair
+{
+	int	first;
+	int	second;
+} t_pair;
+
 class	PmergeMe
 {
 private:
+	std::vector<t_pair>	_pairs;
 
 public:
 	PmergeMe();
 	~PmergeMe();
+
+	void	load_vector(int argc, char **argv);
 };
 
 #endif
