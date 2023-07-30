@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:09:55 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/31 00:07:20 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/31 00:36:49 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ public:
 	void	inspect_vector();
 	void	inspect_seq();
 	void	insertion_sort();
+	void	insert_smallest();
 };
 
 #endif
