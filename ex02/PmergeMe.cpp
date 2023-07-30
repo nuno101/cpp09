@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:08:13 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/27 23:00:09 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/31 00:27:57 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	PmergeMe::load_vector(int argc, char **argv)
 			//std::cout << "argv[i] " << argv[i] << std::endl;
 			temp.second = std::stoi(argv[i]);
 		}
-		else
+		else // handle odd nr of elements
 			temp.second = temp.first;
 		_x_pairs.push_back(temp);
 		i++;
@@ -47,11 +47,12 @@ void	PmergeMe::load_vector(int argc, char **argv)
 	//std::cout << "Elements added: " << i - 2 << std::endl;
 }
 
-int	PmergeMe::vector_sort_pairs()
+void	PmergeMe::vector_sort_pairs()
 {
-	int	temp, min;
+	//int	temp, min;
+	int	temp;
 
-	min = _x_pairs.begin()->first;
+	//min = _x_pairs.begin()->first;
 	for (std::vector<t_pair>::iterator it = _x_pairs.begin(); it != _x_pairs.end(); it++)
 	{
 		if ((*it).first > (*it).second)
@@ -60,10 +61,10 @@ int	PmergeMe::vector_sort_pairs()
 			(*it).first = (*it).second;
 			(*it).second = temp;
 		}
-		if (min > (*it).first)
-			min = (*it).first;
+		_sequence.push_back((*it).second);
+		//if (min > (*it).first)
+		//	min = (*it).first;
 	}
-	return (min);
 }
 
 void	PmergeMe::inspect_vector()
@@ -75,7 +76,37 @@ void	PmergeMe::inspect_vector()
 	std::cout << std::endl;
 }
 
-void	build_s_vector()
+void	PmergeMe::inspect_seq()
 {
+	std::cout << "Sequence: (";
+	for (std::vector<int>::iterator it = _sequence.begin(); it != _sequence.end(); it++)
+	{
+		std::cout << *it;
+		if ((it + 1) != _sequence.end())
+			std::cout << " , ";
+	}
+	std::cout << " )" << std::endl;
+}
+/*
+https://en.wikipedia.org/wiki/Insertion_sort
+https://www.geeksforgeeks.org/cpp-program-for-insertion-sort/
+*/
+void	PmergeMe::insertion_sort()
+{
+	int	i, j, temp;
 
+	i = 1;
+	while (i < (int)_sequence.size())
+	{
+		temp = _sequence.at(i); 
+		j = i - 1;
+		while ( j >= 0 && (_sequence.at(j) > temp) )
+		{
+			_sequence.at(j + 1) = _sequence.at(j); 
+			j = j - 1;
+		}
+		_sequence.at(j + 1) = temp;
+		i++;
+	}
+	//_sequence.push_back(min);
 }

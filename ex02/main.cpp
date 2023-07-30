@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:04:07 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/27 22:58:58 by nuno             ###   ########.fr       */
+/*   Updated: 2023/07/31 00:31:49 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	main(int argc, char **argv)
 	gettimeofday(&start, NULL);
 
 	int	i = 1;
-	int	min;
+	//int	min;
 
 	if (argc < 2)
 	{
@@ -68,9 +68,11 @@ int	main(int argc, char **argv)
 	PmergeMe pm;
 	pm.load_vector(argc, argv);
 	pm.inspect_vector();
-	min = pm.vector_sort_pairs();
-	std::cout << "Min " << min << std::endl;
+	pm.vector_sort_pairs();
 	pm.inspect_vector();
+	pm.inspect_seq();
+	pm.insertion_sort();
+	pm.inspect_seq();
 
 	std::cout << "After: TODO!" << std::endl;
 	// Execution time
