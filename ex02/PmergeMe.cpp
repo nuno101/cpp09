@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:08:13 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/01 16:24:17 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/01 22:59:13 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ void	PmergeMe::load_vector(int argc, char **argv)
 			temp.second = std::stoi(argv[i]);
 		}
 		else // handle odd nr of elements
-			temp.second = temp.first;
+			temp.second = -1;
+			//temp.second = temp.first;
 		_x_pairs.push_back(temp);
 		i++;
 	}
@@ -122,6 +123,8 @@ int	PmergeMe::insert_smallest()
 			smallest = (*it).first;
 		}
 	}
+	if (smallest == -1)
+		return (smallest);
 	i = (int) _sequence.size();
 	_sequence.resize(i + 1);
 	while (i > 0)
@@ -136,20 +139,20 @@ int	PmergeMe::insert_smallest()
 /*
  * prepare user input in correct order of insertion
  */
-void	PmergeMe::prepare_user_seq(int min)
+int	PmergeMe::prepare_user_seq(int min)
 {
-	std::vector<int> temp;
-
 	// collect elements pending insertion
+	std::cout << "To insert: ";
 	for (std::vector<t_pair>::iterator it = _x_pairs.begin(); it != _x_pairs.end(); it++)
 	{
-		if ((*it).first != min)
+		if ((*it).first != min && (*it).first >= 0)
 		{
-			temp.push_back((*it).first);
+			_temp.push_back((*it).first);
 			std::cout << (*it).first << " ";
 		}
 	}
 	std::cout << "\n";
+	return (_temp.size());
 }
 
 /*
@@ -161,12 +164,30 @@ void	PmergeMe::powerless_two(int size)
 
 	i = 1;
 	pow2 = 0;
+	int icount = 0;
 
 	while(i < (size + 2))
 	{
 		pow2 = pow(2, i) - pow2;
-		std::cout << pow2 << " ";
+		std::cout << "i " << i << " group of " << pow2 << "\n";
+		if (icount >= 2)
+		{
+			std::cout << "insert index: ";
+			for (int j = icount + pow2; j > icount; j--)
+			{
+				std::cout << j << " " ;
+				insert_pending(j - 3);
+			}
+			std::cout << "\n";
+		}
+		icount += pow2;
+		//std::cout << "icount " << icount << "\n";
 		i++;
 	}
-	std::cout << "\n";
+}
+
+void	PmergeMe::insert_pending(int index)
+{
+	if (index < (int) _temp.size())
+		_sequence.push_back(_temp.at(index));
 }

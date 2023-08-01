@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:09:55 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/01 16:07:22 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/01 22:47:09 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ class	PmergeMe
 {
 private:
 	std::vector<t_pair>	_x_pairs;
+	std::vector<int>	_temp;
 	std::vector<int>	_sequence;
 
 public:
@@ -44,8 +45,9 @@ public:
 	void	inspect_seq(std::string prefix);
 	void	insertion_sort();
 	int		insert_smallest();
-	void	prepare_user_seq(int min);
+	int		prepare_user_seq(int min);
 	void	powerless_two(int size);
+	void	insert_pending(int index);
 };
 
 #endif
