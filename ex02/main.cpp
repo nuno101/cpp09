@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:04:07 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/31 00:43:28 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/01 15:23:26 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	main(int argc, char **argv)
 	gettimeofday(&start, NULL);
 
 	int	i = 1;
-	//int	min;
+	int	min; // smallest sequence element
 
 	if (argc < 2)
 	{
@@ -70,11 +70,12 @@ int	main(int argc, char **argv)
 	pm.inspect_vector();
 	pm.vector_sort_pairs();
 	pm.inspect_vector();
-	pm.inspect_seq();
+	pm.inspect_seq("Step 2: ");
 	pm.insertion_sort();
-	pm.inspect_seq();
-	pm.insert_smallest();
-	pm.inspect_seq();
+	pm.inspect_seq("Step 3: ");
+	min = pm.insert_smallest();
+	pm.inspect_seq("Step 4: ");
+	pm.prepare_user_seq(min);
 
 	std::cout << "After: TODO!" << std::endl;
 	// Execution time

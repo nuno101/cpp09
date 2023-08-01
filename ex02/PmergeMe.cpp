@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:08:13 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/31 00:57:56 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/01 15:27:55 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ void	PmergeMe::inspect_vector()
 	std::cout << std::endl;
 }
 
-void	PmergeMe::inspect_seq()
+void	PmergeMe::inspect_seq(std::string prefix)
 {
-	std::cout << "Sequence: (";
+	std::cout << prefix << "Sequence: (";
 	for (std::vector<int>::iterator it = _sequence.begin(); it != _sequence.end(); it++)
 	{
 		std::cout << *it;
@@ -110,7 +110,7 @@ void	PmergeMe::insertion_sort()
  * find pair of smallest
  * resize _sequence vector and add smallest to it's beginning
  */
-void	PmergeMe::insert_smallest()
+int	PmergeMe::insert_smallest()
 {
 	int	i, smallest, second;
 
@@ -130,4 +130,27 @@ void	PmergeMe::insert_smallest()
 		i--;
 	}
 	_sequence.at(0) = smallest;
+	return (smallest);
 }
+
+/*
+ * prepare user input in correct order of insertion
+ */
+void	PmergeMe::prepare_user_seq(int min)
+{
+	std::vector<int> temp;
+
+	// collect elements pending insertion
+	for (std::vector<t_pair>::iterator it = _x_pairs.begin(); it != _x_pairs.end(); it++)
+	{
+		if ((*it).first != min)
+		{
+			temp.push_back((*it).first);
+			std::cout << (*it).first << " ";
+		}
+	}
+}
+
+/*
+ *
+ */
