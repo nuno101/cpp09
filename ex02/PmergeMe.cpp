@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:08:13 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/01 23:15:10 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/02 00:39:02 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,12 +108,27 @@ void	PmergeMe::insertion_sort()
 }
 
 /*
+ * 
+ */
+static	void push_fwd(int smallest, std::vector<int> *list)
+{
+	int i = (int) list->size();
+	list->resize(i + 1);
+	while (i > 0)
+	{
+		list->at(i) = list->at(i - 1); 
+		i--;
+	}
+	list->at(0) = smallest;
+}
+
+/*
  * find pair of smallest
  * resize _sequence vector and add smallest to it's beginning
  */
 int	PmergeMe::insert_smallest()
 {
-	int	i, smallest, second;
+	int	smallest, second;
 
 	second = _sequence.at(0);
 	for (std::vector<t_pair>::iterator it = _x_pairs.begin(); it != _x_pairs.end(); it++)
@@ -123,16 +138,8 @@ int	PmergeMe::insert_smallest()
 			smallest = (*it).first;
 		}
 	}
-	if (smallest == -1)
-		return (smallest);
-	i = (int) _sequence.size();
-	_sequence.resize(i + 1);
-	while (i > 0)
-	{
-		_sequence.at(i) = _sequence.at(i - 1); 
-		i--;
-	}
-	_sequence.at(0) = smallest;
+	if (smallest > -1)
+		push_fwd(smallest, &_sequence);
 	return (smallest);
 }
 
@@ -173,13 +180,13 @@ void	PmergeMe::powerless_two(int size)
 		std::cout << "i " << i << " group of " << pow2 << "\n";
 		if (icount >= 2)
 		{
-			std::cout << "insert index: ";
+			std::cout << "insert index:\n";
 			for (int j = icount + pow2; j > icount; j--)
 			{
-				std::cout << j << " " ;
-				insert_pending(j - 3);
+//					std::cout << j << " " ;
+					insert_pending(j - 3);
 			}
-			std::cout << "\n";
+			//std::cout << "\n";
 		}
 		icount += pow2;
 		//std::cout << "icount " << icount << "\n";
@@ -187,8 +194,35 @@ void	PmergeMe::powerless_two(int size)
 	}
 }
 
+/*
+ * binary search from the start and up to but not including x_i to determine where to insert y_i
+ */
 void	PmergeMe::insert_pending(int index)
 {
 	if (index < (int) _temp.size())
-		_sequence.push_back(_temp.at(index));
+	{
+		//TODO: binary search in sequence
+		for (int i = 0; i < index + 3; i++)
+		{
+			if (i == 0 && _sequence.at(0) > _temp.at(index))
+			{
+				std::cout << "insert " << _temp.at(index) << " before " << _sequence.at(i) << "\n";
+				push_fwd(_temp.at(index), &_sequence);
+			}
+			else if (_sequence.at(i) < _temp.at(index) && _sequence.at(i + 1) > _temp.at(index))
+			{
+				std::cout << "insert " << _temp.at(index) << " after " << _sequence.at(i) << "\n";
+/*
+				int j = (int) _sequence.size();
+				_sequence.resize(j + 1);
+				while (j > i)
+				{
+					_sequence.at(j) = _sequence.at(j - 1); 
+					j--;
+				}
+				_sequence.at(j) = _temp.at(index);
+*/
+			}
+		}
+	}
 }

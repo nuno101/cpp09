@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:04:07 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/01 22:47:30 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/02 00:24:45 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,8 @@ int	main(int argc, char **argv)
 	pm.inspect_seq("Step 4: ");
 	int temp_size = pm.prepare_user_seq(min);
 	pm.powerless_two(temp_size);
-	pm.inspect_seq("Step 5: ");
+	pm.inspect_seq("After:  ");
 
-	std::cout << "After: TODO!" << std::endl;
 	// Execution time
 	// See also: https://stackoverflow.com/questions/10192903/time-in-milliseconds-in-c
 	gettimeofday(&stop, NULL);
