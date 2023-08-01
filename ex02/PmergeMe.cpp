@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:08:13 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/01 22:59:13 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/01 23:15:10 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ int	PmergeMe::prepare_user_seq(int min)
 	std::cout << "To insert: ";
 	for (std::vector<t_pair>::iterator it = _x_pairs.begin(); it != _x_pairs.end(); it++)
 	{
-		if ((*it).first != min && (*it).first >= 0)
+		if ((*it).first != min)// && (*it).first >= 0)
 		{
 			_temp.push_back((*it).first);
 			std::cout << (*it).first << " ";
@@ -166,7 +166,8 @@ void	PmergeMe::powerless_two(int size)
 	pow2 = 0;
 	int icount = 0;
 
-	while(i < (size + 2))
+	//while(i < (size + 2))
+	while(icount < size + 2)
 	{
 		pow2 = pow(2, i) - pow2;
 		std::cout << "i " << i << " group of " << pow2 << "\n";
