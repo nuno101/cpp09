@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:08:13 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/01 15:27:55 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/01 16:24:17 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,8 +149,24 @@ void	PmergeMe::prepare_user_seq(int min)
 			std::cout << (*it).first << " ";
 		}
 	}
+	std::cout << "\n";
 }
 
 /*
- *
+ * one less than a power of two
  */
+void	PmergeMe::powerless_two(int size)
+{
+	int	pow2, i;
+
+	i = 1;
+	pow2 = 0;
+
+	while(i < (size + 2))
+	{
+		pow2 = pow(2, i) - pow2;
+		std::cout << pow2 << " ";
+		i++;
+	}
+	std::cout << "\n";
+}

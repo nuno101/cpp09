@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:09:55 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/01 15:26:11 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/01 16:07:22 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include <vector>
+#include <cmath>
 
 #define ERROR 1
 #define WARN 2
@@ -44,6 +45,7 @@ public:
 	void	insertion_sort();
 	int		insert_smallest();
 	void	prepare_user_seq(int min);
+	void	powerless_two(int size);
 };
 
 #endif

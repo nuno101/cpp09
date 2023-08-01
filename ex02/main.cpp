@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:04:07 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/01 15:23:26 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/01 16:08:32 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ int	main(int argc, char **argv)
 	min = pm.insert_smallest();
 	pm.inspect_seq("Step 4: ");
 	pm.prepare_user_seq(min);
+	pm.powerless_two(20);
 
 	std::cout << "After: TODO!" << std::endl;
 	// Execution time
