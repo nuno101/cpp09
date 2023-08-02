@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:08:13 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/03 00:24:41 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/03 00:46:49 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,3 +260,91 @@ void	PmergeMe::insert_pending(int index)
 		}
 	}
 }
+
+/*
+ * Step 0: store user input in pairs within a vector container
+ */
+void	PmergeMe::deque_store_input(int argc, char **argv)
+{
+	t_pair	temp;
+	int	i = 1;
+
+	while (i < argc)
+	{
+		temp.first = std::stoi(argv[i]);
+		i++;
+		if (i < argc)
+		{
+			temp.second = std::stoi(argv[i]);
+		}
+		else // handle odd nr of elements
+			temp.second = -1;
+		_q_pairs.push_back(temp);
+		i++;
+	}
+	if (VERBOSE >= INFO)
+		deque_inspect_pairs("Step 0: ");
+}
+
+/*
+ * Step 1: Group the elements of X into n/2 floor pairs of elements, arbitrarily,
+ * leaving one element unpaired if there is an odd number of elements.
+ */
+void	PmergeMe::deque_sort_pairs()
+{
+	int	temp;
+
+	for (std::deque<t_pair>::iterator it = _q_pairs.begin(); it != _q_pairs.end(); it++)
+	{
+		if ((*it).first > (*it).second)
+		{
+			temp = (*it).first;
+			(*it).first = (*it).second;
+			(*it).second = temp;
+		}
+		_deque.push_back((*it).second);
+	}
+	if (VERBOSE >= INFO)
+	{
+		deque_inspect_pairs("Step 1: ");
+		inspect_deque("Step 2: ");
+	}
+}
+
+/*
+ * Inspect the content of _q_pairs vector of integer pairs
+ */
+void	PmergeMe::deque_inspect_pairs(std::string prefix)
+{
+	std::cout << prefix;
+	for (std::deque<t_pair>::iterator it = _q_pairs.begin(); it != _q_pairs.end(); it++)
+	{
+		std::cout << "( " << (*it).first << " , " << (*it).second << " ) ";
+	}
+	std::cout << std::endl;
+}
+
+/*
+ * Inspect the content of _deque deque of integers
+ */
+void	PmergeMe::inspect_deque(std::string prefix)
+{
+	std::cout << prefix; 
+	if (VERBOSE >= INFO)
+		std::cout << "( ";
+	for (std::deque<int>::iterator it = _deque.begin(); it != _deque.end(); it++)
+	{
+		std::cout << *it;
+		if ((it + 1) != _deque.end())
+		{
+			if (VERBOSE >= INFO)
+				std::cout << " , ";
+			else
+				std::cout << " ";
+		}
+	}
+	if (VERBOSE >= INFO)
+		std::cout << " )";
+	std::cout << std::endl;
+}
+

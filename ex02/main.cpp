@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:04:07 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/03 00:24:59 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/03 00:48:00 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ bool	validate_input(char *s)
 int	main(int argc, char **argv)
 {
 	struct	timeval stop, start;
-	int	i, min, duration;
+	int	i, min, v_duration, q_duration;
 	std::string	argv_str;
 
 	gettimeofday(&start, NULL);
@@ -77,10 +77,16 @@ int	main(int argc, char **argv)
 	// Execution time
 	// See also: https://stackoverflow.com/questions/10192903/time-in-milliseconds-in-c
 	gettimeofday(&stop, NULL);
- 	duration = ((stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec);
-	std::cout << "Time to process a range of " << argc - 1 << " elements with std::vector : " << duration << " us\n"; 
+	v_duration = ((stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec);
+	std::cout << "Time to process a range of " << argc - 1 << " elements with std::vector : " << v_duration << " us\n"; 
 
 	//TODO - redo using deque
+	gettimeofday(&start, NULL);
+	pm.deque_store_input(argc, argv);
+	pm.deque_sort_pairs();
 
+	gettimeofday(&stop, NULL);
+	q_duration = ((stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec);
+	std::cout << "Time to process a range of " << argc - 1 << " elements with std::deque : " << q_duration << " us\n"; 
 	return (0);
 }
