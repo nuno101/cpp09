@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:04:07 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/02 17:50:39 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/02 18:21:11 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,17 +67,22 @@ int	main(int argc, char **argv)
 
 	PmergeMe pm;
 	pm.load_vector(argc, argv);
-	pm.inspect_vector("Step 0: ");
+	if (VERBOSE >= INFO)
+		pm.inspect_vector("Step 0: ");
 	pm.vector_sort_pairs();
-	pm.inspect_vector("Step 1: ");
-	pm.inspect_seq("Step 2: ");
+	if (VERBOSE >= INFO)
+		pm.inspect_vector("Step 1: ");
+	if (VERBOSE >= INFO)
+		pm.inspect_seq("Step 2: ");
 	pm.insertion_sort();
-	pm.inspect_seq("Step 3: ");
+	if (VERBOSE >= INFO)
+		pm.inspect_seq("Step 3: ");
 	min = pm.insert_smallest();
-	pm.inspect_seq("Step 4: ");
+	if (VERBOSE >= INFO)
+		pm.inspect_seq("Step 4: ");
 	int temp_size = pm.prepare_user_seq(min);
 	pm.powerless_two(temp_size);
-	pm.inspect_seq("After:  ");
+	pm.inspect_seq("After: ");
 
 	// Execution time
 	// See also: https://stackoverflow.com/questions/10192903/time-in-milliseconds-in-c

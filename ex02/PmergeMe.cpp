@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:08:13 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/02 18:18:36 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/02 18:23:17 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,12 @@ void	PmergeMe::inspect_seq(std::string prefix)
 	{
 		std::cout << *it;
 		if ((it + 1) != _sequence.end())
-			std::cout << " , ";
+		{
+			if (VERBOSE >= INFO)
+				std::cout << " , ";
+			else
+				std::cout << " ";
+		}
 	}
 	if (VERBOSE >= INFO)
 		std::cout << " )";
@@ -207,7 +212,8 @@ void	PmergeMe::insert_pending(int index)
 				if (VERBOSE >= INFO)
 					std::cout << " insert " << _temp.at(index) << " before " << _sequence.at(i);
 				push_fwd(_temp.at(index), &_sequence);
-				inspect_seq(" -->  ");
+				if (VERBOSE >= INFO)
+					inspect_seq(" -->  ");
 			}
 			else if (_sequence.at(i) < _temp.at(index) && _sequence.at(i + 1) > _temp.at(index))
 			{
