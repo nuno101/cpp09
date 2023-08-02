@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:08:13 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/02 18:23:17 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/02 23:51:16 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ PmergeMe::~PmergeMe()
 }
 
 /*
- * ingest user input into vector container 
+ * Step 0: store user input in pairs within a vector container
  */
 void	PmergeMe::load_vector(int argc, char **argv)
 {
@@ -42,8 +42,14 @@ void	PmergeMe::load_vector(int argc, char **argv)
 		_x_pairs.push_back(temp);
 		i++;
 	}
+	if (VERBOSE >= INFO)
+		inspect_vector("Step 0: ");
 }
 
+/*
+ * Step 1: Group the elements of X into n/2 floor pairs of elements, arbitrarily,
+ * leaving one element unpaired if there is an odd number of elements.
+ */
 void	PmergeMe::vector_sort_pairs()
 {
 	int	temp;
@@ -58,8 +64,16 @@ void	PmergeMe::vector_sort_pairs()
 		}
 		_sequence.push_back((*it).second);
 	}
+	if (VERBOSE >= INFO)
+	{
+		inspect_vector("Step 1: ");
+		inspect_seq("Step 2: ");
+	}
 }
 
+/*
+ * Inspect the content of _x_pairs vector of integer pairs
+ */
 void	PmergeMe::inspect_vector(std::string prefix)
 {
 	std::cout << prefix;
@@ -70,6 +84,9 @@ void	PmergeMe::inspect_vector(std::string prefix)
 	std::cout << std::endl;
 }
 
+/*
+ * Inspect the content of _sequence vector of integers
+ */
 void	PmergeMe::inspect_seq(std::string prefix)
 {
 	std::cout << prefix; 
@@ -90,10 +107,13 @@ void	PmergeMe::inspect_seq(std::string prefix)
 		std::cout << " )";
 	std::cout << std::endl;
 }
+
 /*
-https://en.wikipedia.org/wiki/Insertion_sort
-https://www.geeksforgeeks.org/cpp-program-for-insertion-sort/
-*/
+ * Sort _sequence using the insertion-sort algorithm
+ *
+ * https://en.wikipedia.org/wiki/Insertion_sort
+ * https://www.geeksforgeeks.org/cpp-program-for-insertion-sort/
+ */
 void	PmergeMe::insertion_sort()
 {
 	int	i, j, temp;
@@ -111,6 +131,8 @@ void	PmergeMe::insertion_sort()
 		_sequence.at(j + 1) = temp;
 		i++;
 	}
+	if (VERBOSE >= INFO)
+		inspect_seq("Step 3: ");
 }
 
 /*
@@ -144,17 +166,19 @@ int	PmergeMe::insert_smallest()
 	}
 	if (smallest > -1)
 		push_fwd(smallest, &_sequence);
+	if (VERBOSE >= INFO)
+		inspect_seq("Step 4: ");
 	return (smallest);
 }
 
 /*
- * prepare user input in correct order of insertion
+ * collect pending elements for insertion
  */
 int	PmergeMe::prepare_user_seq(int min)
 {
 	// collect elements pending insertion into _temp 
 	if (VERBOSE >= INFO)
-		std::cout << "Pending insertion: ";
+		std::cout << "Elements pending insertion: ";
 	for (std::vector<t_pair>::iterator it = _x_pairs.begin(); it != _x_pairs.end(); it++)
 	{
 		if ((*it).first != min)
@@ -170,6 +194,7 @@ int	PmergeMe::prepare_user_seq(int min)
 }
 
 /*
+ * order pending user input in optimal way for of insertion
  * one less than a power of two
  */
 void	PmergeMe::powerless_two(int size)

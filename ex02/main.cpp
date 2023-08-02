@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:04:07 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/02 21:54:49 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/02 23:47:28 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,13 @@ bool	validate_input(char *s)
 	return (true);
 }
 
+/*
+ * Merge-insertion sort algorigthm implementations
+ * 1. using a vector container
+ * 2. using a dequeue container
+ *
+ * See also: https://en.wikipedia.org/wiki/Merge-insertion_sort
+ */
 int	main(int argc, char **argv)
 {
 	struct	timeval stop, start;
@@ -61,19 +68,9 @@ int	main(int argc, char **argv)
 	std::cout << "Before: " << argv_str << std::endl;
 	PmergeMe pm;
 	pm.load_vector(argc, argv);
-	if (VERBOSE >= INFO)
-		pm.inspect_vector("Step 0: ");
 	pm.vector_sort_pairs();
-	if (VERBOSE >= INFO)
-		pm.inspect_vector("Step 1: ");
-	if (VERBOSE >= INFO)
-		pm.inspect_seq("Step 2: ");
 	pm.insertion_sort();
-	if (VERBOSE >= INFO)
-		pm.inspect_seq("Step 3: ");
 	min = pm.insert_smallest();
-	if (VERBOSE >= INFO)
-		pm.inspect_seq("Step 4: ");
 	int temp_size = pm.prepare_user_seq(min);
 	pm.powerless_two(temp_size);
 	pm.inspect_seq("After: ");
