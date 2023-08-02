@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:04:07 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/02 18:21:11 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/02 21:54:49 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,11 @@ bool	validate_input(char *s)
 int	main(int argc, char **argv)
 {
 	struct	timeval stop, start;
+	int	i, min, duration;
+	std::string	argv_str;
+
 	gettimeofday(&start, NULL);
-
-	int	i = 1;
-	int	min; // smallest sequence element
-
+	i = 1;
 	if (argc < 2)
 	{
 		std::cout << "Error: call like ./PmergeMe <positive integer(s) sequence>" << std::endl;
@@ -54,17 +54,11 @@ int	main(int argc, char **argv)
 	while (i < argc)
 	{
 		validate_input(argv[i]);
+		argv_str += std::string(argv[i]) + " ";
 		i++;
 	}
-	std::cout << "Before: ";
-	i = 1;
-	while (i < argc)
-	{
-		std::cout <<  argv[i] << " ";
-		i++;
-	}
-	std::cout << std::endl;
 
+	std::cout << "Before: " << argv_str << std::endl;
 	PmergeMe pm;
 	pm.load_vector(argc, argv);
 	if (VERBOSE >= INFO)
@@ -87,6 +81,7 @@ int	main(int argc, char **argv)
 	// Execution time
 	// See also: https://stackoverflow.com/questions/10192903/time-in-milliseconds-in-c
 	gettimeofday(&stop, NULL);
-	std::cout << ((stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec) << " us\n"; 
+ 	duration = ((stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec);
+	std::cout << "Time to process a range of " << argc - 1 << " elements with std::vector : " << duration << " us\n"; 
 	return (0);
 }
