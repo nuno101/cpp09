@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:04:07 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/02 23:47:28 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/03 00:24:59 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,18 +67,20 @@ int	main(int argc, char **argv)
 
 	std::cout << "Before: " << argv_str << std::endl;
 	PmergeMe pm;
-	pm.load_vector(argc, argv);
+	pm.store_input(argc, argv);
 	pm.vector_sort_pairs();
 	pm.insertion_sort();
 	min = pm.insert_smallest();
-	int temp_size = pm.prepare_user_seq(min);
-	pm.powerless_two(temp_size);
-	pm.inspect_seq("After: ");
-
+	int temp_size = pm.collect_pending(min);
+	pm.order_and_insert_pending(temp_size);
+	pm.inspect_vector("After: ");
 	// Execution time
 	// See also: https://stackoverflow.com/questions/10192903/time-in-milliseconds-in-c
 	gettimeofday(&stop, NULL);
  	duration = ((stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec);
 	std::cout << "Time to process a range of " << argc - 1 << " elements with std::vector : " << duration << " us\n"; 
+
+	//TODO - redo using deque
+
 	return (0);
 }

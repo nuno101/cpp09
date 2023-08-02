@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:08:13 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/03 00:06:32 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/03 00:24:41 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ PmergeMe::~PmergeMe()
 /*
  * Step 0: store user input in pairs within a vector container
  */
-void	PmergeMe::load_vector(int argc, char **argv)
+void	PmergeMe::store_input(int argc, char **argv)
 {
 	t_pair	temp;
 	int	i = 1;
@@ -39,11 +39,11 @@ void	PmergeMe::load_vector(int argc, char **argv)
 		}
 		else // handle odd nr of elements
 			temp.second = -1;
-		_x_pairs.push_back(temp);
+		_v_pairs.push_back(temp);
 		i++;
 	}
 	if (VERBOSE >= INFO)
-		inspect_vector("Step 0: ");
+		inspect_pairs("Step 0: ");
 }
 
 /*
@@ -54,7 +54,7 @@ void	PmergeMe::vector_sort_pairs()
 {
 	int	temp;
 
-	for (std::vector<t_pair>::iterator it = _x_pairs.begin(); it != _x_pairs.end(); it++)
+	for (std::vector<t_pair>::iterator it = _v_pairs.begin(); it != _v_pairs.end(); it++)
 	{
 		if ((*it).first > (*it).second)
 		{
@@ -66,18 +66,18 @@ void	PmergeMe::vector_sort_pairs()
 	}
 	if (VERBOSE >= INFO)
 	{
-		inspect_vector("Step 1: ");
-		inspect_seq("Step 2: ");
+		inspect_pairs("Step 1: ");
+		inspect_vector("Step 2: ");
 	}
 }
 
 /*
- * Inspect the content of _x_pairs vector of integer pairs
+ * Inspect the content of _v_pairs vector of integer pairs
  */
-void	PmergeMe::inspect_vector(std::string prefix)
+void	PmergeMe::inspect_pairs(std::string prefix)
 {
 	std::cout << prefix;
-	for (std::vector<t_pair>::iterator it = _x_pairs.begin(); it != _x_pairs.end(); it++)
+	for (std::vector<t_pair>::iterator it = _v_pairs.begin(); it != _v_pairs.end(); it++)
 	{
 		std::cout << "( " << (*it).first << " , " << (*it).second << " ) ";
 	}
@@ -87,7 +87,7 @@ void	PmergeMe::inspect_vector(std::string prefix)
 /*
  * Inspect the content of _sequence vector of integers
  */
-void	PmergeMe::inspect_seq(std::string prefix)
+void	PmergeMe::inspect_vector(std::string prefix)
 {
 	std::cout << prefix; 
 	if (VERBOSE >= INFO)
@@ -132,7 +132,7 @@ void	PmergeMe::insertion_sort()
 		i++;
 	}
 	if (VERBOSE >= INFO)
-		inspect_seq("Step 3: ");
+		inspect_vector("Step 3: ");
 }
 
 /*
@@ -159,7 +159,7 @@ int	PmergeMe::insert_smallest()
 	int	smallest, second;
 
 	second = _sequence.at(0);
-	for (std::vector<t_pair>::iterator it = _x_pairs.begin(); it != _x_pairs.end(); it++)
+	for (std::vector<t_pair>::iterator it = _v_pairs.begin(); it != _v_pairs.end(); it++)
 	{
 		if ((*it).second == second)
 			smallest = (*it).first;
@@ -167,18 +167,18 @@ int	PmergeMe::insert_smallest()
 	if (smallest > -1)
 		push_fwd(smallest, &_sequence);
 	if (VERBOSE >= INFO)
-		inspect_seq("Step 4: ");
+		inspect_vector("Step 4: ");
 	return (smallest);
 }
 
 /*
  * collect elements pending insertion into _temp
  */
-int	PmergeMe::prepare_user_seq(int min)
+int	PmergeMe::collect_pending(int min)
 {
 	if (VERBOSE >= INFO)
 		std::cout << "Elements pending insertion: ";
-	for (std::vector<t_pair>::iterator it = _x_pairs.begin(); it != _x_pairs.end(); it++)
+	for (std::vector<t_pair>::iterator it = _v_pairs.begin(); it != _v_pairs.end(); it++)
 	{
 		if ((*it).first != min && (*it).first > -1)
 		{
@@ -197,7 +197,7 @@ int	PmergeMe::prepare_user_seq(int min)
  * in binary search to find each element's insertion location
  * call insert_pending() to insert the elements in the final sequence
  */
-void	PmergeMe::powerless_two(int size)
+void	PmergeMe::order_and_insert_pending(int size)
 {
 	int	pow2, i, icount;
 
@@ -240,7 +240,7 @@ void	PmergeMe::insert_pending(int index)
 				std::cout << " insert " << _temp.at(index) << " before " << _sequence.at(i);
 			push_fwd(_temp.at(index), &_sequence);
 			if (VERBOSE >= INFO)
-				inspect_seq(" -->  ");
+				inspect_vector(" -->  ");
 		}
 		else if (_sequence.at(i) < _temp.at(index) && _sequence.at(i + 1) > _temp.at(index))
 		{
@@ -256,7 +256,7 @@ void	PmergeMe::insert_pending(int index)
 			}
 			_sequence.at(j) = _temp.at(index);
 			if (VERBOSE >= INFO)
-				inspect_seq(" -->  ");
+				inspect_vector(" -->  ");
 		}
 	}
 }
