@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:09:55 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/03 00:46:37 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/03 01:03:59 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ class	PmergeMe
 private:
 	// vector containers 
 	std::vector<t_pair>	_v_pairs;
-	std::vector<int>	_temp;
+	std::vector<int>	_temp_vector;
 	std::vector<int>	_sequence;
 	// deque containers 
 	std::deque<t_pair>	_q_pairs;
@@ -59,6 +59,11 @@ public:
 	void	deque_sort_pairs();
 	void	deque_inspect_pairs(std::string prefix);
 	void	inspect_deque(std::string prefix);
+	void	deque_insertion_sort();
+	int		deque_insert_smallest();
+	int		deque_collect_pending(int min);
+	void	deque_order_and_insert_pending(int size);
+	void	deque_insert_pending(int index);
 };
 
 #endif

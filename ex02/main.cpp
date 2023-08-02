@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:04:07 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/03 00:48:00 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/03 01:10:00 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,9 @@ bool	validate_input(char *s)
 int	main(int argc, char **argv)
 {
 	struct	timeval stop, start;
-	int	i, min, v_duration, q_duration;
+	int	i, min, temp_size, v_duration, q_duration;
 	std::string	argv_str;
 
-	gettimeofday(&start, NULL);
 	i = 1;
 	if (argc < 2)
 	{
@@ -67,26 +66,34 @@ int	main(int argc, char **argv)
 
 	std::cout << "Before: " << argv_str << std::endl;
 	PmergeMe pm;
+	//Sort using vector container
+	gettimeofday(&start, NULL);
 	pm.store_input(argc, argv);
 	pm.vector_sort_pairs();
 	pm.insertion_sort();
 	min = pm.insert_smallest();
-	int temp_size = pm.collect_pending(min);
+	temp_size = pm.collect_pending(min);
 	pm.order_and_insert_pending(temp_size);
 	pm.inspect_vector("After: ");
 	// Execution time
 	// See also: https://stackoverflow.com/questions/10192903/time-in-milliseconds-in-c
 	gettimeofday(&stop, NULL);
 	v_duration = ((stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec);
-	std::cout << "Time to process a range of " << argc - 1 << " elements with std::vector : " << v_duration << " us\n"; 
 
-	//TODO - redo using deque
+	//Sort using deque container
 	gettimeofday(&start, NULL);
 	pm.deque_store_input(argc, argv);
 	pm.deque_sort_pairs();
-
+	pm.deque_insertion_sort();
+	min = pm.deque_insert_smallest();
+	temp_size = pm.deque_collect_pending(min);
+	pm.deque_order_and_insert_pending(temp_size);
+	pm.inspect_deque("After: ");
+	// Execution time
 	gettimeofday(&stop, NULL);
 	q_duration = ((stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec);
+
+	std::cout << "Time to process a range of " << argc - 1 << " elements with std::vector : " << v_duration << " us\n"; 
 	std::cout << "Time to process a range of " << argc - 1 << " elements with std::deque : " << q_duration << " us\n"; 
 	return (0);
 }
