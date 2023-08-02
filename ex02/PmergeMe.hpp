@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:09:55 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/01 22:47:09 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/02 17:50:58 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ public:
 
 	void	load_vector(int argc, char **argv);
 	void	vector_sort_pairs();
-	void	inspect_vector();
+	void	inspect_vector(std::string prefix);
 	void	inspect_seq(std::string prefix);
 	void	insertion_sort();
 	int		insert_smallest();

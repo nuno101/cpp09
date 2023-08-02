@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:04:07 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/02 00:24:45 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/02 17:50:39 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ int	main(int argc, char **argv)
 
 	PmergeMe pm;
 	pm.load_vector(argc, argv);
-	pm.inspect_vector();
+	pm.inspect_vector("Step 0: ");
 	pm.vector_sort_pairs();
-	pm.inspect_vector();
+	pm.inspect_vector("Step 1: ");
 	pm.inspect_seq("Step 2: ");
 	pm.insertion_sort();
 	pm.inspect_seq("Step 3: ");

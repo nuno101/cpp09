@@ -1,5 +1,5 @@
 NAME := PmergeMe
-VERBOSE := 4
+VERBOSE := 3
 
 CPP_FLAGS := -Wextra -Werror -Wall --std=c++98 -g -fsanitize=address
 #CPP_FLAGS := -Wextra -Werror -Wall --std=c++98
