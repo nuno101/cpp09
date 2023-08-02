@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:08:13 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/02 23:51:16 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/03 00:06:32 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ void	PmergeMe::insertion_sort()
  */
 static	void push_fwd(int smallest, std::vector<int> *list)
 {
-	int i = (int) list->size();
+	int	i = (int) list->size();
 	list->resize(i + 1);
 	while (i > 0)
 	{
@@ -172,16 +172,15 @@ int	PmergeMe::insert_smallest()
 }
 
 /*
- * collect pending elements for insertion
+ * collect elements pending insertion into _temp
  */
 int	PmergeMe::prepare_user_seq(int min)
 {
-	// collect elements pending insertion into _temp 
 	if (VERBOSE >= INFO)
 		std::cout << "Elements pending insertion: ";
 	for (std::vector<t_pair>::iterator it = _x_pairs.begin(); it != _x_pairs.end(); it++)
 	{
-		if ((*it).first != min)
+		if ((*it).first != min && (*it).first > -1)
 		{
 			_temp.push_back((*it).first);
 			if (VERBOSE >= INFO)
@@ -194,8 +193,9 @@ int	PmergeMe::prepare_user_seq(int min)
 }
 
 /*
- * order pending user input in optimal way for of insertion
- * one less than a power of two
+ * determine optimal order of inserting pending elements when relying 
+ * in binary search to find each element's insertion location
+ * call insert_pending() to insert the elements in the final sequence
  */
 void	PmergeMe::powerless_two(int size)
 {
@@ -214,7 +214,8 @@ void	PmergeMe::powerless_two(int size)
 				std::cout << "pow(2," << i << ") - pow(2," << i-1 << ") -->  group size: " << pow2 << "\n";
 			for (int j = icount + pow2; j > icount; j--)
 			{
-				insert_pending(j - 3);
+				if (j - 3 < (int) _temp.size())
+					insert_pending(j - 3);
 			}
 		}
 		icount += pow2;
@@ -223,39 +224,39 @@ void	PmergeMe::powerless_two(int size)
 }
 
 /*
+ * insert element _temp.at(index) in _sequence
+ *
  * binary search in sequence for insert position of each pending element
  * binary search from the start and up to but not including x_i to determine where to insert y_i
  */
 void	PmergeMe::insert_pending(int index)
 {
-	if (index < (int) _temp.size())
+	int	i, j;
+	for (i = 0; i < index + 3; i++)
 	{
-		for (int i = 0; i < index + 3; i++)
+		if (i == 0 && _sequence.at(0) > _temp.at(index))
 		{
-			if (i == 0 && _sequence.at(0) > _temp.at(index))
-			{
-				if (VERBOSE >= INFO)
-					std::cout << " insert " << _temp.at(index) << " before " << _sequence.at(i);
-				push_fwd(_temp.at(index), &_sequence);
-				if (VERBOSE >= INFO)
-					inspect_seq(" -->  ");
-			}
-			else if (_sequence.at(i) < _temp.at(index) && _sequence.at(i + 1) > _temp.at(index))
-			{
-				if (VERBOSE >= INFO)
-					std::cout << " insert " << _temp.at(index) << " after " << _sequence.at(i);
+			if (VERBOSE >= INFO)
+				std::cout << " insert " << _temp.at(index) << " before " << _sequence.at(i);
+			push_fwd(_temp.at(index), &_sequence);
+			if (VERBOSE >= INFO)
+				inspect_seq(" -->  ");
+		}
+		else if (_sequence.at(i) < _temp.at(index) && _sequence.at(i + 1) > _temp.at(index))
+		{
+			if (VERBOSE >= INFO)
+				std::cout << " insert " << _temp.at(index) << " after " << _sequence.at(i);
 
-				int j = (int) _sequence.size();
-				_sequence.resize(j + 1);
-				while (j > i + 1)
-				{
-					_sequence.at(j) = _sequence.at(j - 1); 
-					j--;
-				}
-				_sequence.at(j) = _temp.at(index);
-				if (VERBOSE >= INFO)
-					inspect_seq(" -->  ");
+			j = (int) _sequence.size();
+			_sequence.resize(j + 1);
+			while (j > i + 1)
+			{
+				_sequence.at(j) = _sequence.at(j - 1); 
+				j--;
 			}
+			_sequence.at(j) = _temp.at(index);
+			if (VERBOSE >= INFO)
+				inspect_seq(" -->  ");
 		}
 	}
 }
