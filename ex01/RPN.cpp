@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:08:54 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/26 10:57:09 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/03 14:12:17 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,17 @@
 /*
  * trim white space around str
  */
-static  std::string trim(const std::string& str)
+static	std::string trim(const std::string& str)
 {
-    if (str.empty())
-        return ("");
-    size_t first = str.find_first_not_of(' ');
-    size_t last = str.find_last_not_of(' ');
-    if (first == std::string::npos || last == std::string::npos)
-    {
-        return ("");
-    }
-    return (str.substr(first, last - first + 1));
+	if (str.empty())
+		return ("");
+	size_t first = str.find_first_not_of(' ');
+	size_t last = str.find_last_not_of(' ');
+	if (first == std::string::npos || last == std::string::npos)
+	{
+		return ("");
+	}
+	return (str.substr(first, last - first + 1));
 }
 
 /*
@@ -54,6 +54,21 @@ RPN::RPN(std::string input)
 
 RPN::~RPN()
 {
+}
+
+RPN::RPN( const RPN &src )
+{
+	if ( VERBOSE >= DEBUG )
+		std::cout << "Copy called" << std::endl;
+	*this = src;
+}
+
+RPN & RPN::operator=( const RPN &src )
+{
+	if ( VERBOSE >= DEBUG )
+		std::cout << "Assign called" << std::endl;
+	this->_queue = src._queue;
+	return *this ;
 }
 
 /*

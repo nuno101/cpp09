@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:07:00 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/26 10:16:17 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/03 14:11:01 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ private:
 public:
 	RPN(std::string input);
 	~RPN();
+	RPN( const RPN &src );
+	RPN &operator=( const RPN &src );
 
 	void	inspect_queue();
 	int		calculate();
