@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:51:51 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/26 23:43:41 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/03 13:52:06 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ private:
 public:
 	BitcoinExchange( std::string btc_prices);
 	~BitcoinExchange();
+	BitcoinExchange( const BitcoinExchange &src );
+	BitcoinExchange &operator=( const BitcoinExchange &src );
 
 	void	read_input(std::string filename);
 	void	parse_btc_data(std::string line);
