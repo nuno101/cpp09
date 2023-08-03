@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:08:13 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/03 01:08:27 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/03 14:18:28 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,30 @@
 
 PmergeMe::PmergeMe()
 {
-	//std::cout << "PmergeMe constructor called"<< std::endl;
 }
 
 PmergeMe::~PmergeMe()
 {
+}
+
+PmergeMe::PmergeMe( const PmergeMe &src )
+{
+    if ( VERBOSE >= DEBUG )
+        std::cout << "Copy called" << std::endl;
+    *this = src;
+}
+
+PmergeMe & PmergeMe::operator=( const PmergeMe &src )
+{
+    if ( VERBOSE >= DEBUG )
+        std::cout << "Assign called" << std::endl;
+    this->_v_pairs = src._v_pairs;
+    this->_temp_vector = src._temp_vector;
+    this->_sequence = src._sequence;
+    this->_q_pairs = src._q_pairs;
+    this->_temp_deque = src._temp_deque;
+    this->_deque = src._deque;
+    return *this ;
 }
 
 /*

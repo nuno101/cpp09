@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:09:55 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/03 01:03:59 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/03 14:16:01 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,9 @@ private:
 public:
 	PmergeMe();
 	~PmergeMe();
+	PmergeMe( const PmergeMe &src );
+	PmergeMe &operator=( const PmergeMe &src );
+
 	// vector container methods
 	void	store_input(int argc, char **argv);
 	void	vector_sort_pairs();

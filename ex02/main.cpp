@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 11:04:07 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/03 01:10:00 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/03 01:13:46 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,11 @@ int	main(int argc, char **argv)
 	min = pm.insert_smallest();
 	temp_size = pm.collect_pending(min);
 	pm.order_and_insert_pending(temp_size);
-	pm.inspect_vector("After: ");
 	// Execution time
 	// See also: https://stackoverflow.com/questions/10192903/time-in-milliseconds-in-c
 	gettimeofday(&stop, NULL);
 	v_duration = ((stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec);
+	pm.inspect_vector("After: ");
 
 	//Sort using deque container
 	gettimeofday(&start, NULL);
@@ -88,10 +88,11 @@ int	main(int argc, char **argv)
 	min = pm.deque_insert_smallest();
 	temp_size = pm.deque_collect_pending(min);
 	pm.deque_order_and_insert_pending(temp_size);
-	pm.inspect_deque("After: ");
 	// Execution time
 	gettimeofday(&stop, NULL);
 	q_duration = ((stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec);
+	if (VERBOSE > 0)
+		pm.inspect_deque("After: ");
 
 	std::cout << "Time to process a range of " << argc - 1 << " elements with std::vector : " << v_duration << " us\n"; 
 	std::cout << "Time to process a range of " << argc - 1 << " elements with std::deque : " << q_duration << " us\n"; 
