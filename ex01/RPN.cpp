@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:08:54 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/03 14:12:17 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/03 23:22:11 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,10 @@ RPN::RPN(std::string input)
 		input = input.substr(end + 1, len);
 		//std::cout << "Input: " << input << std::endl;
 	}
+}
+
+RPN::RPN()
+{
 }
 
 RPN::~RPN()

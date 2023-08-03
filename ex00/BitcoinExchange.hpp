@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:51:51 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/03 13:52:06 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/03 23:20:14 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ private:
 	std::map<int, t_log>		_prices;
 
 public:
-	BitcoinExchange( std::string btc_prices);
+	BitcoinExchange( std::string btc_prices );
+	BitcoinExchange();
 	~BitcoinExchange();
 	BitcoinExchange( const BitcoinExchange &src );
 	BitcoinExchange &operator=( const BitcoinExchange &src );

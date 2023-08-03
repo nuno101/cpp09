@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:55:36 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/03 14:11:30 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/03 23:23:01 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,24 @@ BitcoinExchange::BitcoinExchange( std::string btc_prices )
 		inspect();
 }
 
+BitcoinExchange::BitcoinExchange()
+{
+}
+
 BitcoinExchange::~BitcoinExchange()
 {
 }
 
 BitcoinExchange::BitcoinExchange( const BitcoinExchange &src )
 {
-	if ( VERBOSE >= DEBUG )
+	if (VERBOSE >= DEBUG)
 		std::cout << "Copy called" << std::endl;
 	*this = src;
 }
 
 BitcoinExchange & BitcoinExchange::operator=( const BitcoinExchange &src )
 {
-	if ( VERBOSE >= DEBUG )
+	if (VERBOSE >= DEBUG)
 		std::cout << "Assign called" << std::endl;
 	this->_prices = src._prices;
 	return *this ;
