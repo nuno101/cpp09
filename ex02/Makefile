@@ -1,8 +1,8 @@
 NAME := PmergeMe
 VERBOSE := 0
 
-CPP_FLAGS := -Wextra -Werror -Wall --std=c++98 -g -fsanitize=address
-#CPP_FLAGS := -Wextra -Werror -Wall --std=c++98
+#CPP_FLAGS := -Wextra -Werror -Wall --std=c++98 -g -fsanitize=address
+CPP_FLAGS := -Wextra -Werror -Wall --std=c++98
 
 CPP_FILES := main.cpp PmergeMe.cpp
 HPP_FILES := PmergeMe.hpp
