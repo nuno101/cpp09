@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:04:31 by nuno              #+#    #+#             */
-/*   Updated: 2023/07/26 11:08:23 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/05 12:32:56 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int main(int argc, char **argv)
 	{
 		RPN rpn(argv[1]);
 		//calc.inspect_queue();
-		std::cout << rpn.calculate() << std::endl;
 	}
 	else
 		std::cout << "Error" << std::endl;

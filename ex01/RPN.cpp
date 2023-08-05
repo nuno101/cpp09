@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:08:54 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/03 23:22:11 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/05 12:51:11 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,24 @@ static	std::string trim(const std::string& str)
 	return (str.substr(first, last - first + 1));
 }
 
+static	bool is_operator(std::string str)
+{
+	if (str.compare("+") == 0 || str.compare("-") == 0 || \
+		str.compare("*") == 0 || str.compare("/") == 0)
+		return (true);
+	else
+		return (false);
+}
+
 /*
- * RPN constructor - load the user input into the queue container
+ * RPN constructor - load the user input into the list container
  */
 RPN::RPN(std::string input)
 {
 	std::string	temp;
 	std::size_t end;
 	std::size_t len;
+	int	result;
 
 	if (VERBOSE >= INFO)
 		std::cout << input << std::endl;
@@ -46,10 +56,16 @@ RPN::RPN(std::string input)
 		len = input.size();
 		end = input.find(" ");
 		//std::cout << "Arg: " << input.substr(0, end) << std::endl;
-		_queue.push(input.substr(0, end));
+		_list.push_back(input.substr(0, end));
+		if (_list.size() > 2 && is_operator(_list.back()))
+		{
+			//std::cout << "Operator found: " << _list.back() << std::endl;
+			result = process_list();
+		}
 		input = input.substr(end + 1, len);
 		//std::cout << "Input: " << input << std::endl;
 	}
+	std::cout << result << std::endl;
 }
 
 RPN::RPN()
@@ -71,21 +87,21 @@ RPN & RPN::operator=( const RPN &src )
 {
 	if ( VERBOSE >= DEBUG )
 		std::cout << "Assign called" << std::endl;
-	this->_queue = src._queue;
+	this->_list = src._list;
 	return *this ;
 }
 
 /*
- * NOTE: inspecting the queue will empty the queue container.
+ * NOTE: inspecting the list will empty the list container.
  * Use only for debugging purposes
  */
-void	RPN::inspect_queue()
+void	RPN::inspect_list()
 {
-	std::cout << "Queue inspector:" << std::endl;
-	while (!_queue.empty())
+	std::cout << "list inspector:" << std::endl;
+	while (!_list.empty())
 	{
-		std::cout << _queue.front() << std::endl;
-		_queue.pop();
+		std::cout << _list.front() << std::endl;
+		_list.pop_front();
 	}
 	std::cout << std::endl;
 }
@@ -116,29 +132,19 @@ static int	calc(int temp, int temp2, std::string operation)
 	}
 }
 
-/*
- * dequeue the arguments to perform the calculation
- */
-int	RPN::calculate()
+int	RPN::process_list()
 {
-	int	temp;
-	int	temp2;
+	int	temp, temp2, result;
 	std::string	op;
 
 	try
 	{
-		temp = std::stoi(_queue.front());
-		_queue.pop();
-		while (!_queue.empty())
-		{
-			temp2 = std::stoi(_queue.front());
-			_queue.pop();
-			temp = calc(temp, temp2, _queue.front());
-			_queue.pop();
-			if (VERBOSE >= INFO)
-				std::cout << "result: " << temp << std::endl;
-		}
-		return (temp);
+		op = _list.back();
+		_list.pop_back();
+		temp2 = std::stoi(_list.back());
+		_list.pop_back();
+		temp = std::stoi(_list.back());
+		_list.pop_back();
 	}
 	catch (const std::invalid_argument& ia)
 	{
@@ -156,4 +162,8 @@ int	RPN::calculate()
 			std::cout << "Error" << std::endl;
 		exit(1);
 	}
+	result = calc(temp, temp2, op);
+	//std::cout << "result: " << result << "\n" << std::endl;
+	_list.push_back(std::to_string(result));
+	return (result);
 }
