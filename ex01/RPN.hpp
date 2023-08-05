@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:07:00 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/03 23:21:47 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/05 12:38:15 by nlouro           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define RPN_HPP
 
 #include <iostream>
-#include <queue>
+#include <list>
 
 #define ERROR 1
 #define WARN 2
@@ -24,7 +24,7 @@
 class	RPN
 {
 private:
-	std::queue<std::string>	_queue;
+	std::list<std::string>	_list;
 
 public:
 	RPN(std::string input);
@@ -33,8 +33,8 @@ public:
 	RPN( const RPN &src );
 	RPN &operator=( const RPN &src );
 
-	void	inspect_queue();
-	int		calculate();
+	void	inspect_list();
+	int		process_list();
 }; 
 
 #endif
