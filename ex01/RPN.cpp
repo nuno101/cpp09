@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:08:54 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/05 12:51:11 by nlouro           ###   ########.fr       */
+/*   Updated: 2023/08/05 18:06:32 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,11 @@ RPN::RPN(std::string input)
 		input = input.substr(end + 1, len);
 		//std::cout << "Input: " << input << std::endl;
 	}
+	if (_list.size() > 1)
+	{
+		std::cout << "Error" << std::endl;
+		exit(1);
+	}
 	std::cout << result << std::endl;
 }
 
@@ -121,7 +126,15 @@ static int	calc(int temp, int temp2, std::string operation)
 	else if (operation.compare("*") == 0)
 		return (temp * temp2);
 	else if (operation.compare("/") == 0)
-		return (temp / temp2);
+	{
+		if (temp2 == 0)
+		{
+			std::cout << "Error" << std::endl;
+			exit(1);
+		}
+		else
+			return (temp / temp2);
+	}
 	else
 	{
 		if (VERBOSE >= ERROR)
