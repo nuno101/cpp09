@@ -6,7 +6,7 @@
 /*   By: nuno <nlouro@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 22:55:36 by nuno              #+#    #+#             */
-/*   Updated: 2023/08/03 23:23:01 by nuno             ###   ########.fr       */
+/*   Updated: 2023/08/05 17:47:17 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,7 +273,11 @@ void	BitcoinExchange::process_input(std::string line)
 	// parse date
 	date_index = parse_date(first);
 	if (date_index == -1)
+	{
 		message = "Error: bad input => " + first;
+		std::cout << message << std::endl;
+		return ;
+	}
 	else
 		message = first;
 	// parse value
@@ -286,6 +290,5 @@ void	BitcoinExchange::process_input(std::string line)
 		message = "Error: too large of a number.";
 	else
 		message = "Error: unsupported result!";
-
 	std::cout << message << std::endl;
 }
